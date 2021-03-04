@@ -1,9 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 import datetime
 # Create your models here
 class Contract(models.model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING,default='')
+    date_added = models.DateTimeField(auto_now_add=True)
     start_date = models.DateField('start date') # 开始日期
     end_date = models.DateField('end date') # 截止日期
     sign_date = models.DateField('sign date') # 签订日期
@@ -23,8 +26,8 @@ class Contract(models.model):
     water_bill = models.DecimalField('monthly water unit price') # 每月单价水费
     elect_bill = models.DecimalField('monthly electricity unit price') # 每月单价电费
 
-
 class Company(models.model):
+    date_added = models.DateTimeField(auto_now_add=True)
     owner_name = models.CharField('owner name') # 法人姓名
     owner_phone_num = PhoneNumberField(null=False, blank=False, unique=True) # 电话
     owner_address = models.CharField('owner address') # 单位或家庭地址
