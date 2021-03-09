@@ -8,15 +8,16 @@ class Company(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     owner_name = models.CharField(max_length=200) # 法人姓名
     #owner_phone_num = PhoneNumberField(null=False, blank=False, unique=True) # 电话
-    owner_address = models.CharField(max_length=200) # 单位或家庭地址
+    owner_address = models.CharField(max_length=2000) # 单位或家庭地址
     owner_id = models.CharField(max_length=200) # 身份证号
-    company_name = models.CharField(max_length=200) # 公司名
-    core_business = models.CharField(max_length=200) # 公司业务
+    company_name = models.CharField(max_length=2000) # 公司名
+    core_business = models.CharField(max_length=2000) # 公司业务
 
 class Contract(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING,default='')
-    date_added = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,default='') # 合同创建者
+    date_added = models.DateTimeField(auto_now_add=True) #合同创建日期
+    approved_by_manager = models.BooleanField(default=False) #总经理批准
     start_date = models.DateField('start date') # 开始日期
     end_date = models.DateField('end date') # 截止日期
     sign_date = models.DateField('sign date') # 签订日期

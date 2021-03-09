@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #bootstrap
+    'bootstrap3',
+    'bootstrap_datepicker_plus',
+    #my app
     'contracts.apps.ContractsConfig',
     'users.apps.UsersConfig',
 ]
@@ -122,3 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+BOOTSTRAP3 = {'include_jquery': True, }
+
+DATE_INPUT_FORMATS = ['%Y-%m-%d']

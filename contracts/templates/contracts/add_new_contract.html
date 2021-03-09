@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% load bootstrap3 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+
+{% block content %}
+<div class="col-md-7 col-lg-8">
+    <h4 class="mb-3">新增合同</h4>
+    <form method="post" action="{% url 'contracts:new_contract' company.id %}">
+        {% csrf_token %}
+        <div class="row g-3">
+        {{ form.non_field_errors }}
+        <div class="fieldWrapper col-sm-6">
+            {{ form.start_date.errors }}
+            <label for="{{ form.start_date.id_for_label }}" class="form-label">合同开始日期（年-月-日，如1970-02-28）:</label>
+            {{ form.start_date }}
+        </div>
+        <div class="fieldWrapper col-sm-6">
+            {{ form.end_date.errors }}
+            <label for="{{ form.end_date.id_for_label }}" class="form-label">合同截止日期:</label>
+            {{ form.end_date }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.sign_date.errors }}
+            <label for="{{ form.sign_date.id_for_label }}" class="form-label">合同签署日期:</label>
+            {{ form.sign_date }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.floor_num.errors }}
+            <label for="{{ form.floor_num.id_for_label }}" class="form-label">楼层号:</label>
+            {{ form.floor_num }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.store_loc_code.errors }}
+            <label for="{{ form.store_loc_code.id_for_label }}">铺位号:</label>
+            {{ form.store_loc_code }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.region.errors }}
+            <label for="{{ form.region.id_for_label }}">铺位所在区:</label>
+            {{ form.region }}
+        </div>
+        <!-- 铺位租金信息 -->
+        <div class="fieldWrapper col-sm-12">
+            {{ form.unit_price.errors }}
+            <label for="{{ form.unit_price.id_for_label }}" class="form-label">月租金(每㎡):</label>
+            {{ form.unit_price }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.area.errors }}
+            <label for="{{ form.area.id_for_label }}" class="form-label">铺位面积(㎡):</label>
+            {{ form.area }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.monthly_price.errors }}
+            <label for="{{ form.monthly_price.id_for_label }}">月总价:</label>
+            {{ form.monthly_price }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.yearly_price.errors }}
+            <label for="{{ form.yearly_price.id_for_label }}">全年总价:</label>
+            {{ form.yearly_price }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.payment_cycle.errors }}
+            <label for="{{ form.payment_cycle.id_for_label }}">付款周期（月）:</label>
+            {{ form.payment_cycle }}
+        </div>
+        <!-- 铺位经营项目 -->
+        <div class="fieldWrapper col-sm-12">
+            {{ form.business.errors }}
+            <label for="{{ form.business.id_for_label }}" class="form-label">铺位经营项目:</label>
+            {{ form.business }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.category.errors }}
+            <label for="{{ form.category.id_for_label }}" class="form-label">业态:</label>
+            {{ form.category }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.promotion_price.errors }}
+            <label for="{{ form.promotion_price.id_for_label }}">推广费:</label>
+            {{ form.promotion_price }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.deposit.errors }}
+            <label for="{{ form.deposit.id_for_label }}">铺位总定金:</label>
+            {{ form.deposit }}
+        </div>
+        <!--履约保证金-->
+        <div class="fieldWrapper col-sm-12">
+            {{ form.perf_bond.errors }}
+            <label for="{{ form.perf_bond.id_for_label }}" class="form-label">履约保证金总价:</label>
+            {{ form.perf_bond }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.water_bill.errors }}
+            <label for="{{ form.water_bill.id_for_label }}">每月单价水费:</label>
+            {{ form.water_bill }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.elect_bill.errors }}
+            <label for="{{ form.elect_bill.id_for_label }}">每月单价电费:</label>
+            {{ form.elect_bill }}
+        </div>
+        <hr class="my-4">
+        <button name="submit" class="btn btn-success">完成</button>
+        <input type="hidden" name="next" value="{% url 'contracts:home' %}" />
+        </div>
+    </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-3">查看合同</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+        <tr><th style="width: 50%">编号</th><td>{{contract.id}}</td></tr>
+        <tr><th style="width: 50%">合同创建日期</th><td>{{contract.owner_name}}</td></tr>
+        <tr><th style="width: 50%">合同创建者</th><td>{{contract.created_by.username}}</td></tr>
+        <tr><th style="width: 50%">公司名</th><td>{{contract.company.company_name}}</td></tr>
+        <tr><th style="width: 50%">开始日期</th><td>{{contract.start_date}}</td></tr>
+        <tr><th style="width: 50%">截止日期</th><td>{{contract.end_date}}</td></tr>
+        <tr><th style="width: 50%">签订日期</th><td>{{contract.sign_date}}</td></tr>
+        <tr><th style="width: 50%">楼层</th><td>{{contract.floor_num}}</td></tr>
+        <tr><th style="width: 50%">铺位号</th><td>{{contract.store_loc_code}}</td></tr>
+        <tr><th style="width: 50%">铺位所在区</th><td>{{contract.region}}</td></tr>
+        <tr><th style="width: 50%">月租金(每㎡)</th><td>{{contract.unit_price}}</td></tr>
+        <tr><th style="width: 50%">面积</th><td>{{contract.area}}</td></tr>
+        <tr><th style="width: 50%">月总价</th><td>{{contract.monthly_price}}</td></tr>
+        <tr><th style="width: 50%">全年总价</th><td>{{contract.yearly_price}}</td></tr>
+        <tr><th style="width: 50%">收款周期(月)</th><td>{{contract.payment_cycle}}</td></tr>
+        <tr><th style="width: 50%">经营项目</th><td>{{contract.business}}</td></tr>
+        <tr><th style="width: 50%">业态</th><td>{{contract.category}}</td></tr>
+        <tr><th style="width: 50%">推广费</th><td>{{contract.promotion_price}}</td></tr>
+        <tr><th style="width: 50%">铺位总定金</th><td>{{contract.deposit}}</td></tr>
+        <tr><th style="width: 50%">履约保证金总价</th><td>{{contract.perf_bond}}</td></tr>
+        <tr><th style="width: 50%">每月单价水费</th><td>{{contract.water_bill}}</td></tr>
+        <tr><th style="width: 50%">每月单价电费</th><td>{{contract.elect_bill}}</td></tr>
+    </table>
+</div>
+<hr class="my-4">
+<small class="d-block text-end">
+    <a href="{% url 'contracts:all_contracts' %}">完成查看</a>
+</small>
+{% endblock content %}

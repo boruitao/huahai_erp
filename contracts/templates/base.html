@@ -1,4 +1,6 @@
 {% load static %}
+{% load bootstrap3 %} 
+
 <!doctype html>
 <html>
     <head>
@@ -26,6 +28,7 @@
         }
     </style>
     <link href="{% static 'css/offcanvas.css' %}" rel="stylesheet">
+    
     </head>
     <body class="bg-light">
     
@@ -41,8 +44,13 @@
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Notifications</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同</a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdown01">
+                    <li><a class="dropdown-item" href="{% url 'contracts:all_contracts' %}">查看合同</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contracts:unapproved_contracts' %}">合同审核</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contracts:all_companies' %}">新增合同</a></li>
+                  </ul>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Profile</a>
@@ -103,6 +111,11 @@
               <h1 class="h6 mb-0 text-white lh-1">Bootstrap</h1>
               <small>Since 2011</small>
             </div>
+          </div>
+
+          <div>
+            {%block content%}
+            {%endblock%}
           </div>
         
           <div class="my-3 p-3 bg-body rounded shadow-sm">
@@ -178,8 +191,7 @@
         </main>
         
         
-    <script src="{% static 'js/offcanvas.js' %}"></script>
-
-        <script src="offcanvas.js"></script>
+      <script src="{% static 'js/offcanvas.js' %}"></script>
+      <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>
 </html> 
