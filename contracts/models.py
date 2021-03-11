@@ -13,7 +13,7 @@ class Company(models.Model):
     company_name = models.CharField(max_length=2000) # 公司名
     core_business = models.CharField(max_length=2000) # 公司业务
 
-class Contract(models.Model):
+class Contract(models.Model): #合同
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,default='') # 合同创建者
     date_added = models.DateTimeField(auto_now_add=True) #合同创建日期

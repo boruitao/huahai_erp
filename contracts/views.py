@@ -6,6 +6,7 @@ from django.http import Http404
 from .models import Contract, Company
 from .forms import ContractForm, CompanyForm
 # Create your views here.
+@login_required(login_url='/users/login/')
 def home(request):
     return render(request, 'base.html')
 
