@@ -6,7 +6,7 @@ import datetime
 
 class Company(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
-    owner_name = models.CharField(max_length=200) # 法人姓名
+    owner_name = models.CharField(max_length=200) # 姓名
     #owner_phone_num = PhoneNumberField(null=False, blank=False, unique=True) # 电话
     owner_address = models.CharField(max_length=2000) # 单位或家庭地址
     owner_id = models.CharField(max_length=200) # 身份证号

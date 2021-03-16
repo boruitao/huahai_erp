@@ -4,7 +4,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import Http404
 from .models import Contract, Company
+from payment.models import Payment_Notice
 from .forms import ContractForm, CompanyForm
+from datetime import date
+from contracts.form_generator import generate_first_payment_notice
+
 # Create your views here.
 @login_required(login_url='/users/login/')
 def home(request):
@@ -27,6 +31,13 @@ def approve_contract(request, contract_id):
     contract = Contract.objects.get(id=contract_id)
     contract.approved_by_manager = True
     contract.save()
+    
+    #now = datetime.datetime.now()
+    #count = Payment_Notice.objects.filter(date_released.date=now.date).filter(date_released.month=now.month).filter(date_released.year=now.year)+1
+    today = date.today()
+    count = Payment_Notice.objects.filter(date_released__year=today.year).count()+1
+    pn = generate_first_payment_notice(contract, count)
+    pn.save()
     return HttpResponseRedirect(reverse('contracts:unapproved_contracts'))
 
 @login_required
