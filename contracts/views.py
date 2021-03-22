@@ -35,7 +35,7 @@ def approve_contract(request, contract_id):
     #now = datetime.datetime.now()
     #count = Payment_Notice.objects.filter(date_released.date=now.date).filter(date_released.month=now.month).filter(date_released.year=now.year)+1
     today = date.today()
-    count = Payment_Notice.objects.filter(date_released__year=today.year).count()+1
+    count = Payment_Notice.objects.filter(date_released__year=today.year, date_released__month=today.month, date_released__day=today.day).count()+1
     pn = generate_first_payment_notice(contract, count)
     pn.save()
     return HttpResponseRedirect(reverse('contracts:unapproved_contracts'))

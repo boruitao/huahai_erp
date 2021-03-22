@@ -22,7 +22,7 @@
           <td>{{notice.cname}}</td>
           <td>{{notice.loc_code}}</td>
           <td>{{notice.total_amount}}</td>
-          <td><a href="{% url 'payment:check_payment_notice' notice.id %}">查看缴款通知单</a></td>
+          <td><a href="{% url 'payment:check_first_payment_notice' notice.id %}">查看缴款通知单</a></td>
         </tr>
         {% endfor %}
       </tbody>

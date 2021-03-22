@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-3">查看首次缴款单</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+        <tr><th style="width: 50%">单据编号</th><td>{{payment_notice.notice_id}}</td></tr>
+        <tr><th style="width: 50%">下单日期</th><td>{{payment_notice.date_released}}</td></tr>
+        <tr><th style="width: 50%">经销商名称</th><td>{{payment_notice.cname}}</td></tr>
+        <tr><th style="width: 50%">席位号</th><td>{{payment_notice.loc_code}}</td></tr>
+        <tr><th style="width: 50%">付款截止日期</th><td>{{payment_notice.deadline}}</td></tr>
+        <tr><th style="width: 50%">缴款时段开始时间</th><td>{{payment_notice.payment_start_date}}</td></tr>
+        <tr><th style="width: 50%">缴款时段截止时间</th><td>{{payment_notice.payment_end_date}}</td></tr>
+        <tr><th style="width: 50%">租赁费</th><td>{{payment_notice.total_rent}} ({{payment_notice.payment_cycle}}个月)</td></tr>
+        <tr><th style="width: 50%">统一推广费</th><td>{{payment_notice.promotion_fee}}</td></tr>
+        <tr><th style="width: 50%">费用总计</th><td>{{payment_notice.total_amount}}</td></tr>
+    </table>
+</div>
+<hr class="my-4">
+<small class="d-block text-end">
+    <a href="{% url 'payment:edit_first_payment_notice' payment_notice.id %}">编辑单据</a>
+</small>
+<small class="d-block text-end">
+    <a href="{% url 'payment:print_first_payment_notice' payment_notice.id %}">打印此单据</a>
+</small>
+<small class="d-block text-end">
+    <a href="{% url 'payment:active_first_payment_notices' %}">查看其他单据</a>
+</small>
+{% endblock content %}
