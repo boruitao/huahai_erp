@@ -30,3 +30,12 @@ class First_Payment_Notice(Payment_Notice):
         notice_id=nid, total_rent=rent, payment_cycle=pc, promotion_fee=pf, total_amount=tta, is_active=True, cname=cname, loc_code=loc)
         return payment_notice
 
+class Periodical_Payment_Notice(Payment_Notice):
+    total_amount = models.DecimalField(max_digits=20, decimal_places=3,null=True)
+    period_num = models.IntegerField('period_num') # 季度
+    
+    @classmethod
+    def create_notice(cls, contract, ddl, start_date, end_date, tta, nid, is_active, cname, loc):
+        payment_notice = cls(contract=contract, deadline=ddl, payment_start_date=start_date, payment_end_date=end_date, 
+        notice_id=nid, total_amount=tta, is_active=True, cname=cname, loc_code=loc)
+        return payment_notice

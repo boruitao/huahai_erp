@@ -3,9 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import Http404
-from .models import Contract, Company
-from payment.models import Payment_Notice
-from .forms import ContractForm, CompanyForm
+from .models import Contract, Company, Host
+from payment.models import First_Payment_Notice, Periodical_Payment_Notice
+from .forms import ContractForm, CompanyForm, HostForm
 from datetime import date
 from contracts.form_generator import generate_first_payment_notice
 
@@ -30,14 +30,16 @@ def unapproved_contracts(request):
 def approve_contract(request, contract_id):
     contract = Contract.objects.get(id=contract_id)
     contract.approved_by_manager = True
+    date_str = contract.sign_date.year * 10000 + contract.sign_date.month * 100 + contract.sign_date.day
+    date_str = date_str * 1000 + Contract.objects.filter(approved_by_manager=True, host_company__id=contract.host_company.id, sign_date=contract.sign_date).count()+1
+    contract.contract_id = "{:02d}".format(contract.host_company.id) + str(date_str) 
     contract.save()
     
-    #now = datetime.datetime.now()
-    #count = Payment_Notice.objects.filter(date_released.date=now.date).filter(date_released.month=now.month).filter(date_released.year=now.year)+1
     today = date.today()
-    count = Payment_Notice.objects.filter(date_released__year=today.year, date_released__month=today.month, date_released__day=today.day).count()+1
-    pn = generate_first_payment_notice(contract, count)
-    pn.save()
+    count_notice = First_Payment_Notice.objects.filter(date_released__year=today.year, date_released__month=today.month, date_released__day=today.day).count()+1
+    first_pn = generate_first_payment_notice(contract, count_notice)
+    first_pn.save()
+
     return HttpResponseRedirect(reverse('contracts:unapproved_contracts'))
 
 @login_required
@@ -56,11 +58,24 @@ def new_contract(request, company_id):
         if form.is_valid():
             new_contract = form.save(commit=False)
             new_contract.created_by = request.user  # Set contracts owner attribute to current user.
-            new_contract.company = company
+            new_contract.buyer_company = company
             new_contract.save()  # Save the changes to the database.
             return HttpResponseRedirect(reverse('contracts:all_contracts'))
     context = {'company' : company, 'form': form}
     return render(request, 'contracts/add_new_contract.html', context)
+
+@login_required
+def new_host(request, company_id):
+    company = Company.objects.get(id=company_id)
+    if request.method == 'POST':
+        form = HostForm(request.POST)
+        if form.is_valid():
+            new_host = form.save(commit=False)
+            new_host.save()  # Save the changes to the database.
+            return HttpResponseRedirect(reverse('contracts:new_contract',  kwargs={'company_id': company_id}))
+    form = HostForm()
+    context = {'company' : company, 'form': form}
+    return render(request, 'hosts/add_new_host.html', context)
 
 @login_required
 def all_companies(request):

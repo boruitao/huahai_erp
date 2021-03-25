@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 import datetime
 # Create your models here
 
+#乙方
 class Company(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     owner_name = models.CharField(max_length=200) # 姓名
@@ -13,10 +14,24 @@ class Company(models.Model):
     company_name = models.CharField(max_length=2000) # 公司名
     core_business = models.CharField(max_length=2000) # 公司业务
 
+#甲方
+class Host(models.Model):
+    company_name = models.CharField(max_length=2000) # 公司名
+    owner_name = models.CharField(max_length=200) # 法人姓名
+    #owner_phone_num = PhoneNumberField(null=False, blank=False, unique=True) # 电话
+    address = models.CharField(max_length=2000) # 地址
+    date_added = models.DateTimeField(auto_now_add=True)
+    city = models.CharField(max_length=200) # 甲方公司所在城市
+
+    def __str__(self):
+        return self.company_name
+
 class Contract(models.Model): #合同
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,default='') # 合同创建者
+    buyer_company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    host_company = models.ForeignKey(Host, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING) # 合同创建者
     date_added = models.DateTimeField(auto_now_add=True) #合同创建日期
+    contract_id = models.CharField(default='未审核通过', max_length=13) #合同编号
     approved_by_manager = models.BooleanField(default=False) #总经理批准
     start_date = models.DateField('start date') # 开始日期
     end_date = models.DateField('end date') # 截止日期
@@ -37,4 +52,3 @@ class Contract(models.Model): #合同
     perf_bond = models.DecimalField(max_digits=20, decimal_places=3) # 履约保证金总价
     water_bill = models.DecimalField(max_digits=20, decimal_places=3) # 每月单价水费
     elect_bill = models.DecimalField(max_digits=20, decimal_places=3) # 每月单价电费
-

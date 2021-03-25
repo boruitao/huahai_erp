@@ -1,4 +1,4 @@
-from .models import First_Payment_Notice
+from .models import First_Payment_Notice, Periodical_Payment_Notice
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -14,13 +14,13 @@ from payment.excel_helper import create_first_payment_notice
 def active_first_payment_notices(request):
     notices = First_Payment_Notice.objects.filter(is_active=True)
     context = {'payment_notices': notices}
-    return render(request, 'payment_notices/active_first_payment_notices.html', context)
+    return render(request, 'first_payment_notices/active_first_payment_notices.html', context)
 
 @login_required
 def check_first_payment_notice(request, payment_notice_id):
     notice = First_Payment_Notice.objects.get(id=payment_notice_id)
     context = {'payment_notice': notice}
-    return render(request, 'payment_notices/check_first_payment_notice.html', context)
+    return render(request, 'first_payment_notices/check_first_payment_notice.html', context)
 
 @login_required
 def edit_first_payment_notice(request, payment_notice_id):
@@ -35,7 +35,7 @@ def edit_first_payment_notice(request, payment_notice_id):
             new_notice.save()  # Save the changes to the database.
             return HttpResponseRedirect(reverse('payment:active_first_payment_notices'))
     context = {'payment_notice' : notice, 'form': form}
-    return render(request, 'payment_notices/edit_first_payment_notice.html', context)
+    return render(request, 'first_payment_notices/edit_first_payment_notice.html', context)
 
 @login_required
 def print_first_payment_notice(request, payment_notice_id):
@@ -46,3 +46,20 @@ def print_first_payment_notice(request, payment_notice_id):
     response.write(xlsx_data)
    # return HttpResponseRedirect(reverse('payment:active_payment_notices'))
     return response
+
+@login_required
+def all_periodical_payment_notices(request):
+    notices = Periodical_Payment_Notice.objects.all()
+    context = {'payment_notices': notices}
+    return render(request, 'payment_notices/all_periodical_payment_notices.html', context)
+
+# @login_required
+# def check_periodical_payment_notice(request, payment_notice_id):
+
+
+# @login_required
+# def edit_periodical_payment_notice(request, payment_notice_id):
+    
+
+# @login_required
+# def print_periodical_payment_notice(request, payment_notice_id):
