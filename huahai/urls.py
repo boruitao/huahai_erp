@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^users/', include(('users.urls','users'), namespace='users')),
     url(r'', include(('contracts.urls','contracts'), namespace='contracts')),
     url(r'', include(('payment.urls','payment'), namespace='payment')),
+    url(r'', include(('notice_handler.urls','notice_handler'), namespace='notice_handler')),
 ]

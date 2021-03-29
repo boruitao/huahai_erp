@@ -25,10 +25,10 @@
 <hr class="my-4">
 <!-- <small class="d-block text-end">
     <a href="{% url 'payment:edit_first_payment_notice' payment_notice.id %}">编辑单据</a>
-</small>
-<small class="d-block text-end">
-    <a href="{% url 'payment:print_first_payment_notice' payment_notice.id %}">打印此单据</a>
 </small> -->
+<small class="d-block text-end">
+    <a href="{% url 'payment:print_periodical_payment_notice' payment_notice.id %}">打印此单据</a>
+</small>
 <small class="d-block text-end">
     <a href="{% url 'payment:all_periodical_payment_notices' %}">查看其他单据</a>
 </small>

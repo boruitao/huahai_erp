@@ -1,8 +1,78 @@
 import xlsxwriter
+import os
 from io import BytesIO
-from .models import First_Payment_Notice
+from .models import First_Payment_Notice, Periodical_Payment_Notice
+from django.conf import settings
+from django.templatetags.static import static
 from django.http import HttpResponse
 from django.utils.translation import ugettext
+
+def create_periodical_payment_notice(payment_notice_id):
+    notice = Periodical_Payment_Notice.objects.get(id=payment_notice_id)
+    nid = get_value(notice, payment_notice_id, "notice_id")
+    pnum = get_value(notice, payment_notice_id, "period_num")
+    output = BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet_s = workbook.add_worksheet('缴款单')
+    worksheet_s.set_column('A:E', 20)
+    #TODO: insert image
+    # print(str(os.path.isfile(static('logos/huahai_periodical.png'))))
+    # worksheet_s.insert_image('A2', static('logos/huahai_periodical.png'))
+    title = workbook.add_format({
+        'font_name':'Cambria',
+        'font_size': 16,
+        #'align': 'center',
+        'valign': 'vcenter'
+    })
+    normal_text = workbook.add_format({
+        'font_name':'Cambria',
+        'font_size': 10,
+        'valign': 'vcenter',
+        'align': 'left',
+    })
+    border_round = workbook.add_format({
+        'border':1
+    })
+    worksheet_s.merge_range(get_range('B', 2, 'E', 2), "华海电脑数码通讯广场连锁股份有限公司缴款通知单", title)
+    worksheet_s.write(get_cell('B',3), "通知日期：", normal_text)
+    worksheet_s.write(get_cell('D',3), "单据编号：", normal_text)
+
+    worksheet_s.write(get_cell('A',5), "商家名称：", normal_text)
+    worksheet_s.write(get_cell('C',5), "席位号：", normal_text)
+    worksheet_s.write(get_cell('A',6), "缴款内容： ", normal_text)
+    worksheet_s.write(get_cell('A',7), "缴款项目： ", normal_text)
+    worksheet_s.write(get_cell('A',8), "结算起止日期： ", normal_text)
+    worksheet_s.write(get_cell('A',9), "缴款金额（小写）： ", normal_text)
+    worksheet_s.write(get_cell('A',10), "（大写）：", normal_text)
+    worksheet_s.write(get_cell('A',12), "本期截止缴款时间：", normal_text)
+
+    worksheet_s.merge_range(get_range('A', 13, 'E', 13), "逾期未缴滞纳金计算公式如下：租金金额*天数*千分之一＝滞纳金", normal_text)
+    worksheet_s.merge_range(get_range('A', 14, 'E', 14), "收件人盖章：", normal_text)
+    worksheet_s.merge_range(get_range('A', 15, 'E', 15), "签字：", normal_text)
+
+    date_obj = get_value(notice, payment_notice_id, "date_released")
+    date_released_text = str(date_obj.year) + "年" + str(date_obj.month) + "月" +  str(date_obj.day) + "日"
+    worksheet_s.write(get_cell('C',3), date_released_text, normal_text)
+    worksheet_s.write(get_cell('E',3), nid, normal_text)
+
+    worksheet_s.write(get_cell('B',5), get_value(notice, payment_notice_id, "cname"), normal_text)
+    worksheet_s.merge_range(get_range('D', 5, 'E', 5), get_value(notice, payment_notice_id, "loc_code"), normal_text)
+    worksheet_s.merge_range(get_range('B', 6, 'E', 6), "租金", normal_text)
+    worksheet_s.merge_range(get_range('B', 7, 'E', 7), "第 " + str(get_value(notice, payment_notice_id, "period_num")) + " 期", normal_text)
+    sdate_obj = get_value(notice, payment_notice_id, "payment_start_date")
+    edate_obj = get_value(notice, payment_notice_id, "payment_end_date")
+    worksheet_s.merge_range(get_range('B', 8, 'E', 8), sdate_obj.strftime('%Y-%m-%d') + " - " + edate_obj.strftime('%Y-%m-%d'), normal_text)
+    worksheet_s.merge_range(get_range('B', 9, 'E', 9), "¥" + str(get_value(notice, payment_notice_id, "total_amount")), normal_text)
+    worksheet_s.merge_range(get_range('B', 10, 'E', 10), "", normal_text)
+    worksheet_s.merge_range(get_range('B', 12, 'E', 12), get_value(notice, payment_notice_id, "deadline").strftime('%Y-%m-%d'), normal_text)
+
+    worksheet_s.conditional_format(get_range('A', 5, 'E', 5), { 'type' : 'no_blanks' , 'format' : border_round} )
+   #worksheet_s.conditional_format(get_range('A', 6, 'E', 10), { 'type' : 'no_blanks' , 'format' : border_round} )
+
+    #box(workbook, worksheet_s, 4, 0, 9, 4)
+    workbook.close()
+    xlsx_data = output.getvalue()
+    return xlsx_data, nid, pnum
 
 def create_first_payment_notice(payment_notice_id):
     output = BytesIO()
@@ -221,7 +291,7 @@ bold_red_text, normal_text, right_text, bold_right_text, border_format,right_bor
     worksheet_s.merge_range(get_range('C', 11+offset, 'E', 11+offset), get_value(notice,payment_notice_id, "total_amount"), num_text)
     worksheet_s.merge_range(get_range('C', 15+offset, 'E', 15+offset), get_value(notice,payment_notice_id, "total_amount"), bold_red_text)
 
-    ddl_obj = get_value(notice,payment_notice_id, "deadline")
+    ddl_obj = get_value(notice, payment_notice_id, "deadline")
     worksheet_s.merge_range(get_range('B', 16+offset, 'D', 16+offset), ddl_obj.strftime('%Y-%m-%d'), normal_text)
 
     worksheet_s.conditional_format(get_range('A', 2+offset, 'N', 2+offset), { 'type' : 'no_blanks' , 'format' : border_format} )
@@ -243,3 +313,38 @@ def get_range(l1, n1, l2, n2):
 
 def get_cell(l, n):
     return l + str(n)
+
+# def box(workbook, sheet_name, row_start, col_start, row_stop, col_stop):
+#     """Makes an RxC box. Use integers, not the 'A1' format"""
+
+#     rows = row_stop - row_start + 1
+#     cols = col_stop - col_start + 1
+
+#     for x in range((rows) * (cols)): # Total number of cells in the rectangle
+
+#         box_form = workbook.add_format()   # The format resets each loop
+#         row = row_start + (x // cols)
+#         column = col_start + (x % cols)
+
+#         if x < (cols):                     # If it's on the top row
+#             box_form = add_to_format(box_form, {'top':1}, workbook)
+#         if x >= ((rows * cols) - cols):    # If it's on the bottom row
+#             box_form = add_to_format(box_form, {'bottom':1}, workbook)
+#         if x % cols == 0:                  # If it's on the left column
+#             box_form = add_to_format(box_form, {'left':1}, workbook)
+#         if x % cols == (cols - 1):         # If it's on the right column
+#             box_form = add_to_format(box_form, {'right':1}, workbook)
+
+#         sheet_name.write(row, column, "", box_form)
+
+# def add_to_format(existing_format, dict_of_properties, workbook):
+#     """Give a format you want to extend and a dict of the properties you want to
+#     extend it with, and you get them returned in a single format"""
+#     new_dict={}
+#     for key, value in existing_format.__dict__.items():
+#         if (value != 0) and (value != {}) and (value != None):
+#             new_dict[key]=value
+#     del new_dict['escapes']
+#     d = new_dict.copy()
+#     d.update(dict_of_properties)
+#     return(workbook.add_format(d)))

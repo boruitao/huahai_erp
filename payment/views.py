@@ -8,7 +8,7 @@ from .forms import FirstPaymentNoticeForm
 import xlwt
 from datetime import date
 from django.http import HttpResponse
-from payment.excel_helper import create_first_payment_notice
+from payment.excel_helper import create_first_payment_notice, create_periodical_payment_notice
 
 # Create your views here.
 @login_required
@@ -80,5 +80,12 @@ def check_periodical_payment_notice(request, payment_notice_id):
 # def edit_periodical_payment_notice(request, payment_notice_id):
     
 
-# @login_required
-# def print_periodical_payment_notice(request, payment_notice_id):
+@login_required
+def print_periodical_payment_notice(request, payment_notice_id):
+    xlsx_data, nid, pnum = create_periodical_payment_notice(payment_notice_id)
+    filename = "periodical_notice_%s_%d.xls" % (nid, pnum)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response.write(xlsx_data)
+   # return HttpResponseRedirect(reverse('payment:active_payment_notices'))
+    return response

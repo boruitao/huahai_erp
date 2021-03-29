@@ -29,7 +29,7 @@
           <td>{{contract.end_date}}</td>
           <td><a href="{% url 'contracts:contract' contract.id %}">查看合同</a></td>
           <td>
-            <form method="post" action="{% url 'contracts:approve_contract' contract.id %}">
+            <form method="post" action="{% url 'notice_handler:approve_contract' contract.id %}">
                 {% csrf_token %}
                 <button name="submit" class="btn-success" onclick="return confirm('您确定批准此合同吗（编号：{{ contract.id}}）？');">批准</button>
             </form>

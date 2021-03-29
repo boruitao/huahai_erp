@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'payment.apps.PaymentConfig',
     'contracts.apps.ContractsConfig',
     'users.apps.UsersConfig',
+    'notice_handler.apps.NoticeHandlerConfig',
 ]
 
 MIDDLEWARE = [
