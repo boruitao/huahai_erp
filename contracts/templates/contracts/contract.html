@@ -9,9 +9,9 @@
         <tr><th style="width: 50%">合同创建者</th><td>{{contract.created_by.username}}</td></tr>
         <tr><th style="width: 50%">甲方公司名</th><td>{{contract.host_company.company_name}}</td></tr>
         <tr><th style="width: 50%">乙方公司名</th><td>{{contract.buyer_company.company_name}}</td></tr>
-        <tr><th style="width: 50%">开始日期</th><td>{{contract.start_date}}</td></tr>
-        <tr><th style="width: 50%">截止日期</th><td>{{contract.end_date}}</td></tr>
-        <tr><th style="width: 50%">签订日期</th><td>{{contract.sign_date}}</td></tr>
+        <tr><th style="width: 50%">开始日期</th><td>{{contract.start_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">截止日期</th><td>{{contract.end_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">签订日期</th><td>{{contract.sign_date|date:'Y-m-d'}}</td></tr>
         <tr><th style="width: 50%">楼层</th><td>{{contract.floor_num}}</td></tr>
         <tr><th style="width: 50%">铺位号</th><td>{{contract.store_loc_code}}</td></tr>
         <tr><th style="width: 50%">铺位所在区</th><td>{{contract.region}}</td></tr>

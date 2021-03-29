@@ -20,13 +20,13 @@
         {% for contract in contracts %}
         <tr>
           <td>{{contract.id}}</td>
-          <td>{{contract.sign_date}}</td>
+          <td>{{contract.sign_date|date:'Y-m-d'}}</td>
           <td>{{contract.store_loc_code}}</td>
           <td>{{contract.business}}</td>
           <td>{{contract.buyer_company.company_name}}</td>
           <td>{{contract.unit_price}}</td>
-          <td>{{contract.start_date}}</td>
-          <td>{{contract.end_date}}</td>
+          <td>{{contract.start_date|date:'Y-m-d'}}</td>
+          <td>{{contract.end_date|date:'Y-m-d'}}</td>
           <td>
             {% if contract.approved_by_manager %}
             <a>已批准</a>

@@ -7,7 +7,7 @@ from .models import Contract, Company, Host
 from payment.models import First_Payment_Notice, Periodical_Payment_Notice
 from .forms import ContractForm, CompanyForm, HostForm
 from datetime import date
-from contracts.form_generator import generate_first_payment_notice
+from contracts.form_generator import generate_first_payment_notice, generate_periodical_payment_notices
 
 # Create your views here.
 @login_required(login_url='/users/login/')
@@ -30,7 +30,7 @@ def unapproved_contracts(request):
 def approve_contract(request, contract_id):
     contract = Contract.objects.get(id=contract_id)
     contract.approved_by_manager = True
-    date_str = contract.sign_date.year * 10000 + contract.sign_date.month * 100 + contract.sign_date.day
+    date_str = (contract.sign_date.year - 2000) * 10000 + contract.sign_date.month * 100 + contract.sign_date.day
     date_str = date_str * 1000 + Contract.objects.filter(approved_by_manager=True, host_company__id=contract.host_company.id, sign_date=contract.sign_date).count()+1
     contract.contract_id = "{:02d}".format(contract.host_company.id) + str(date_str) 
     contract.save()
@@ -40,6 +40,7 @@ def approve_contract(request, contract_id):
     first_pn = generate_first_payment_notice(contract, count_notice)
     first_pn.save()
 
+    generate_periodical_payment_notices(contract)
     return HttpResponseRedirect(reverse('contracts:unapproved_contracts'))
 
 @login_required

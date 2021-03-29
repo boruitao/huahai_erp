@@ -6,14 +6,16 @@ from django.urls import reverse
 from django.http import Http404
 from .forms import FirstPaymentNoticeForm
 import xlwt
+from datetime import date
 from django.http import HttpResponse
 from payment.excel_helper import create_first_payment_notice
 
 # Create your views here.
 @login_required
 def active_first_payment_notices(request):
-    notices = First_Payment_Notice.objects.filter(is_active=True)
-    context = {'payment_notices': notices}
+    active_notices = First_Payment_Notice.objects.filter(is_active=True)
+    inactive_notices = First_Payment_Notice.objects.filter(is_active=False)
+    context = {'payment_notices': {'active' : active_notices, 'inactive' : inactive_notices}}
     return render(request, 'first_payment_notices/active_first_payment_notices.html', context)
 
 @login_required
@@ -48,13 +50,30 @@ def print_first_payment_notice(request, payment_notice_id):
     return response
 
 @login_required
+def approve_first_payment_notice(request, payment_notice_id):
+    notice = First_Payment_Notice.objects.get(id=payment_notice_id)
+    notice.is_active = False
+    notice.date_payed = date.today()
+    notice.save()
+    return HttpResponseRedirect(reverse('payment:active_first_payment_notices'))
+
+# @login_required
+# def all_first_payment_notices(request):
+#     notices = Periodical_Payment_Notice.objects.all()
+#     context = {'payment_notices': notices}
+#     return render(request, 'payment_notices/all_periodical_payment_notices.html', context)
+
+@login_required
 def all_periodical_payment_notices(request):
     notices = Periodical_Payment_Notice.objects.all()
     context = {'payment_notices': notices}
-    return render(request, 'payment_notices/all_periodical_payment_notices.html', context)
+    return render(request, 'periodical_payment_notices/all_periodical_payment_notices.html', context)
 
-# @login_required
-# def check_periodical_payment_notice(request, payment_notice_id):
+@login_required
+def check_periodical_payment_notice(request, payment_notice_id):
+    notice = Periodical_Payment_Notice.objects.get(id=payment_notice_id)
+    context = {'payment_notice': notice}
+    return render(request, 'periodical_payment_notices/check_periodical_payment_notice.html', context)
 
 
 # @login_required
