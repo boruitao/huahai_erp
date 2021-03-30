@@ -14,6 +14,7 @@
           <th>截止日期</th>
           <th></th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -23,17 +24,23 @@
           <td>{{contract.sign_date}}</td>
           <td>{{contract.store_loc_code}}</td>
           <td>{{contract.business}}</td>
-          <td>{{contract.company.company_name}}</td>
+          <td>{{contract.buyer_company.company_name}}</td>
           <td>{{contract.unit_price}}</td>
           <td>{{contract.start_date}}</td>
           <td>{{contract.end_date}}</td>
-          <td><a href="{% url 'contracts:contract' contract.id %}">查看合同</a></td>
           <td>
             <form method="post" action="{% url 'notice_handler:approve_contract' contract.id %}">
                 {% csrf_token %}
-                <button name="submit" class="btn-success" onclick="return confirm('您确定批准此合同吗（编号：{{ contract.id}}）？');">批准</button>
+                <button name="submit" class="btn-primary" onclick="return confirm('您确定批准此合同吗（编号：{{ contract.id}}）？');">审核通过</button>
             </form>
           </td>
+          <td>
+            <form method="post" action="{% url 'notice_handler:unapprove_contract' contract.id %}">
+              {% csrf_token %}
+              <button name="submit" class="btn-secondary" onclick="return confirm('您确定取消此合同吗（编号：{{ contract.id}}）？');">未通过</button>
+            </form>
+          </td>
+          <td><a href="{% url 'contracts:check_contract' contract.id %}">查看合同</a></td>
         </tr>
         {% endfor %}
       </tbody>

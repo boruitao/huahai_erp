@@ -1,4 +1,4 @@
-from .models import First_Payment_Notice, Periodical_Payment_Notice
+from .models import First_Payment_Notice, Periodical_Payment_Notice, PN_Status
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -13,8 +13,8 @@ from payment.excel_helper import create_first_payment_notice, create_periodical_
 # Create your views here.
 @login_required
 def active_first_payment_notices(request):
-    active_notices = First_Payment_Notice.objects.filter(is_active=True)
-    inactive_notices = First_Payment_Notice.objects.filter(is_active=False)
+    active_notices = First_Payment_Notice.objects.filter(status=PN_Status.ACTIVE)
+    inactive_notices = First_Payment_Notice.objects.filter(status=PN_Status.PAYED)
     context = {'payment_notices': {'active' : active_notices, 'inactive' : inactive_notices}}
     return render(request, 'first_payment_notices/active_first_payment_notices.html', context)
 
@@ -51,8 +51,9 @@ def print_first_payment_notice(request, payment_notice_id):
 
 @login_required
 def approve_first_payment_notice(request, payment_notice_id):
+    #TODO: logic behind this
     notice = First_Payment_Notice.objects.get(id=payment_notice_id)
-    notice.is_active = False
+    notice.status = PN_Status.PAYED
     notice.date_payed = date.today()
     notice.save()
     return HttpResponseRedirect(reverse('payment:active_first_payment_notices'))

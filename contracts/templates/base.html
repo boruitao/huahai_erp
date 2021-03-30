@@ -48,15 +48,15 @@
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同签订</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="{% url 'contracts:all_companies' %}">新增合同</a></li>
-                    <li><a class="dropdown-item" href="{% url 'contracts:unapproved_contracts' %}">合同审核</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contracts:verify_contracts' %}">合同审核</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同管理</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="{% url 'contracts:all_contracts' %}">查看合同</a></li>
-                    <li><a class="dropdown-item" href="{% url 'notice_handler:contract_manage_search' %}">合同缴款修改</a></li>
-                    <li><a class="dropdown-item" href="#">缴款修改审核</a></li>
+                    <li><a class="dropdown-item" href="{% url 'notice_handler:manage_search_contract' %}">缴款方式修改</a></li>
+                    <li><a class="dropdown-item" href="#">修改审核#</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -69,9 +69,9 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">财务表单</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                    <li><a class="dropdown-item" href="#">合同收入概况</a></li>
-                    <li><a class="dropdown-item" href="#">应收款表单</a></li>
-                    <li><a class="dropdown-item" href="#">超期款表单</a></li>
+                    <li><a class="dropdown-item" href="#">合同收入概况#</a></li>
+                    <li><a class="dropdown-item" href="#">应收款表单#</a></li>
+                    <li><a class="dropdown-item" href="#">超期款表单#</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -83,6 +83,7 @@
                   </ul>
                 </li>
               </ul>
+              
               <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success me-2" type="submit">Search</button>
@@ -102,23 +103,6 @@
             </div>
           </div>
         </nav>
-        
-        <div class="nav-scroller bg--body shadow-sm">
-          <nav class="nav nav-underline" aria-label="Secondary navigation">
-            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-            <a class="nav-link" href="#">
-              Friends
-              <span class="badge bg-light text-dark rounded-pill align-text-bottom">27</span>
-            </a>
-            <a class="nav-link" href="#">Explore</a>
-            <a class="nav-link" href="#">Suggestions</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-          </nav>
-        </div>
         
         <main class="container">
           <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">

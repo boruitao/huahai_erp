@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 from django.urls import reverse
 from django.http import Http404
-from .models import Contract, Company, Host
+from .models import Contract, Company, Host, Contract_Status
 from payment.models import First_Payment_Notice, Periodical_Payment_Notice
 from .forms import ContractForm, CompanyForm, HostForm
 from datetime import date
@@ -16,15 +17,77 @@ def home(request):
 
 @login_required
 def all_contracts(request):
-    contracts = Contract.objects.filter(created_by=request.user).order_by('-sign_date')
-    context = {'contracts': contracts}
+    contracts = Contract.objects.all().order_by('-sign_date')
+    context = {'contracts' : contracts}
     return render(request, 'contracts/all_contracts.html', context)
 
 @login_required
-def unapproved_contracts(request):
-    contracts = Contract.objects.filter(approved_by_manager=False).order_by('-sign_date')
+def all_created_contracts(request):
+    contracts = Contract.objects.filter(status=Contract_Status.CREATED).order_by('-sign_date')
     context = {'contracts': contracts}
-    return render(request, 'contracts/unapproved_contracts.html', context)
+    return render(request, 'contracts/all_created_contracts.html', context)
+
+@login_required
+def all_approved_contracts(request):
+    contracts = Contract.objects.filter(status=Contract_Status.APPROVED).order_by('-sign_date')
+    context = {'contracts': contracts}
+    return render(request, 'contracts/all_approved_contracts.html', context)
+
+@login_required
+def all_unapproved_contracts(request):
+    contracts = Contract.objects.filter(status=Contract_Status.UNAPPROVED).order_by('-sign_date')
+    context = {'contracts': contracts}
+    return render(request, 'contracts/all_unapproved_contracts.html', context)
+
+@login_required
+def all_completed_contracts(request):
+    contracts = Contract.objects.filter(status=Contract_Status.COMPLETED).order_by('-sign_date')
+    context = {'contracts': contracts}
+    return render(request, 'contracts/all_completed_contracts.html', context)
+
+@login_required
+def verify_contracts(request):
+    contracts = Contract.objects.filter(status=Contract_Status.CREATED).order_by('-sign_date')
+    context = {'contracts': contracts}
+    return render(request, 'contracts/verify_contracts.html', context)
+
+@login_required
+def search_contracts(request, status_id):
+    template_name = 'contracts/all_contracts.html'
+    contract = Contract.objects.all()
+    if status_id == '0':
+        template_name = 'contracts/all_created_contracts.html'
+        contract = Contract.objects.filter(status=status_id)
+    elif status_id == '1':
+        template_name = 'contracts/all_approved_contracts.html'
+        contract = Contract.objects.filter(status=status_id)
+    elif status_id == '2':
+        template_name = 'contracts/all_unapproved_contracts.html'
+        contract = Contract.objects.filter(status=status_id)
+    elif status_id == '3':
+        template_name = 'contracts/all_completed_contracts.html'
+        contract = Contract.objects.filter(status=status_id)
+    
+    if request.method == 'GET':
+        hc_res = request.GET.get('hc_search')
+        bc_res = request.GET.get('bc_search')
+        sl_res = request.GET.get('sl_search')
+        fn_res = request.GET.get('fn_search')
+        try:
+            if hc_res is None and bc_res is None and sl_res is None and fn_res is None:
+                return render(request,template_name,{"contracts": contract})
+            if hc_res is not None:
+                contract = contract.filter(Q(host_company__company_name__icontains=hc_res))
+            if bc_res is not None:
+                contract = contract.filter(Q(buyer_company__company_name__icontains=bc_res) )
+            if sl_res is not None:
+                contract = contract.filter(Q(store_loc_code__icontains=sl_res))
+            if fn_res is not None:
+                contract = contract.filter(Q(floor_num__icontains=fn_res))
+            return render(request,template_name,{"contracts": contract})
+        except:
+            return render(request,template_name,{"contracts": contract})
+    return render(request,template_name,{"contracts": contract})
 
 # @login_required
 # def approve_contract(request, contract_id):
@@ -44,10 +107,10 @@ def unapproved_contracts(request):
 #     return HttpResponseRedirect(reverse('contracts:unapproved_contracts'))
 
 @login_required
-def contract(request, contract_id):
+def check_contract(request, contract_id):
     contract = Contract.objects.get(id=contract_id)
     context = {'contract': contract}
-    return render(request, 'contracts/contract.html', context)
+    return render(request, 'contracts/check_contract.html', context)
 
 @login_required
 def new_contract(request, company_id):

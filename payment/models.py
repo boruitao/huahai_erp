@@ -3,6 +3,11 @@ from django.db import models
 # Create your models here.
 from contracts.models import Company, Contract
 
+class PN_Status(models.IntegerChoices):
+    ACTIVE = 0
+    OVERDUE = 1
+    PAYED = 2
+
 class Payment_Notice(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -10,7 +15,7 @@ class Payment_Notice(models.Model):
     payment_start_date = models.DateField('payment start date')
     payment_end_date = models.DateField('payment end date')
     notice_id = models.CharField(max_length=200)
-    is_active = models.BooleanField(default=False)
+    status = models.IntegerField(default=PN_Status.ACTIVE, choices=PN_Status.choices)
     cname = models.CharField(max_length=200,null=True)
     hname = models.CharField(max_length=200,null=True)
     hcity = models.CharField(max_length=200,null=True)
@@ -28,9 +33,9 @@ class First_Payment_Notice(Payment_Notice):
     date_released = models.DateField(auto_now_add=True)
 
     @classmethod
-    def create_notice(cls, contract, ddl, start_date, end_date, rent, pc, pf, tta, nid, is_active, cname, loc, hname, hcity):
+    def create_notice(cls, contract, ddl, start_date, end_date, rent, pc, pf, tta, nid, cname, loc, hname, hcity):
         payment_notice = cls(contract=contract, deadline=ddl, payment_start_date=start_date, payment_end_date=end_date, 
-        notice_id=nid, total_rent=rent, payment_cycle=pc, promotion_fee=pf, total_amount=tta, is_active=True, cname=cname, 
+        notice_id=nid, total_rent=rent, payment_cycle=pc, promotion_fee=pf, total_amount=tta, cname=cname, 
         loc_code=loc, hname=hname, hcity=hcity)
         return payment_notice
 
@@ -40,8 +45,8 @@ class Periodical_Payment_Notice(Payment_Notice):
     date_released = models.DateField('date_released')
 
     @classmethod
-    def create_notice(cls, contract, ddl, start_date, end_date, dr, tta, nid, is_active, cname, loc, pn, hname, hcity):
+    def create_notice(cls, contract, ddl, start_date, end_date, dr, tta, nid, cname, loc, pn, hname, hcity):
         payment_notice = cls(contract=contract, deadline=ddl, payment_start_date=start_date, payment_end_date=end_date, 
-        date_released=dr, notice_id=nid, total_amount=tta, is_active=True, cname=cname, loc_code=loc, period_num=pn,
+        date_released=dr, notice_id=nid, total_amount=tta, cname=cname, loc_code=loc, period_num=pn,
         hname=hname, hcity=hcity)
         return payment_notice

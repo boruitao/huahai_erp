@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
     <h4 class="mb-3">搜索合同</h4>
-    <form method="get" action="{% url 'notice_handler:contract_manage_search' %}">
+    <form method="get" action="{% url 'notice_handler:manage_search_contract' %}">
         {% csrf_token %}
         <div class="row g-4">
             <div class="fieldWrapper col-sm-3">
@@ -57,14 +57,17 @@
               <td>{{contract.unit_price}}</td>
               <td>{{contract.start_date|date:'Y-m-d'}}</td>
               <td>{{contract.end_date|date:'Y-m-d'}}</td>
-              <td>
-                {% if contract.approved_by_manager %}
-                <a>已批准</a>
-                {% else %}
-                <a>未批准</a>
+              <td>{% if contract.status == 0 %}
+                已创立
+                {% elif contract.status == 1 %}
+                已审核通过
+                {% elif contract.status == 2 %}
+                审核未通过
+                {% elif contract.status == 3 %}
+                已完成
                 {% endif %}
-              </td>
-              <td><a href="{% url 'notice_handler:contract_manage_check' contract.id %}">合同缴款明细</a></td>
+            </td>
+              <td><a href="{% url 'notice_handler:manage_check_contract' contract.id %}">合同缴款明细</a></td>
             </tr>
             {% endfor %}
           </tbody>

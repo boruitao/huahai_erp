@@ -16,7 +16,7 @@ def generate_first_payment_notice(contract, num):
     nid = (today.year * 10000 + today.month * 100 + today.day) * 1000 + num
 
     payment_notice = First_Payment_Notice.create_notice(contract, ddl, sdate, edate, rent, 
-    pc, pf, tta, nid, True, contract.buyer_company.company_name, contract.store_loc_code,
+    pc, pf, tta, nid, contract.buyer_company.company_name, contract.store_loc_code,
     contract.host_company.company_name, contract.host_company.city)
 
     return payment_notice
@@ -58,5 +58,5 @@ def generate_pp_notice(contract, sdate, edate, total_amount, period_num):
     ddl = sdate
     nid = contract.contract_id + str(period_num)
     return Periodical_Payment_Notice.create_notice(contract, ddl, sdate, edate, date_released, 
-    total_amount, nid, True, contract.buyer_company.company_name, contract.store_loc_code, period_num,
+    total_amount, nid, contract.buyer_company.company_name, contract.store_loc_code, period_num,
     contract.host_company.company_name, contract.host_company.city)

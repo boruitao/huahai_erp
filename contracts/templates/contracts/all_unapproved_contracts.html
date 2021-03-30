@@ -6,7 +6,7 @@
       <a class="nav-link active" aria-current="page" href="{% url 'contracts:all_contracts'%}">全部合同</a>
       <a class="nav-link" href="{% url 'contracts:all_created_contracts'%}">已创立的合同</a>
       <a class="nav-link" href="{% url 'contracts:all_approved_contracts'%}">已审核通过的合同</a>
-      <a class="nav-link" href="{% url 'contracts:all_unapproved_contracts'%}">审核未通过的合同</a>
+      <a class="nav-link" href="{% url 'contracts:all_unapproved_contracts'%}">未审核通过的合同</a>
       <a class="nav-link" href="{% url 'contracts:all_completed_contracts'%}">已存档的合同</a>
       <a class="nav-link" href="#">
         Friends
@@ -41,16 +41,7 @@
             <td>{{contract.unit_price}}</td>
             <td>{{contract.start_date|date:'Y-m-d'}}</td>
             <td>{{contract.end_date|date:'Y-m-d'}}</td>
-            <td>{% if contract.status == 0 %}
-                已创立
-                {% elif contract.status == 1 %}
-                已审核通过
-                {% elif contract.status == 2 %}
-                审核未通过
-                {% elif contract.status == 3 %}
-                已完成
-                {% endif %}
-            </td>
+            <th>审核未通过</th>
             <td><a href="{% url 'contracts:check_contract' contract.id %}">查看合同</a></td>
           </tr>
           {% endfor %}
@@ -59,7 +50,7 @@
   </div>
   <hr class="my-4">
   <h4 class="mb-3">搜索此页</h4>
-    <form method="get" action="{% url 'contracts:search_contracts' 4 %}">
+    <form method="get" action="{% url 'contracts:search_contracts' 2 %}">
         {% csrf_token %}
         <div class="row g-4">
             <div class="fieldWrapper col-sm-3">
