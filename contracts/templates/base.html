@@ -45,22 +45,34 @@
                   <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同</a>
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同签订</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                    <li><a class="dropdown-item" href="{% url 'contracts:all_contracts' %}">查看合同</a></li>
-                    <li><a class="dropdown-item" href="{% url 'contracts:unapproved_contracts' %}">合同审核</a></li>
                     <li><a class="dropdown-item" href="{% url 'contracts:all_companies' %}">新增合同</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contracts:unapproved_contracts' %}">合同审核</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">费用收缴</a>
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同管理</a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdown01">
+                    <li><a class="dropdown-item" href="{% url 'contracts:all_contracts' %}">查看合同</a></li>
+                    <li><a class="dropdown-item" href="{% url 'notice_handler:contract_manage_search' %}">合同缴款修改</a></li>
+                    <li><a class="dropdown-item" href="#">缴款修改审核</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">费用收缴单</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="{% url 'payment:active_first_payment_notices' %}">首次缴款单</a></li>
                     <li><a class="dropdown-item" href="{% url 'payment:all_periodical_payment_notices' %}">缴款通知单</a></li>
                   </ul>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Switch account</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">财务表单</a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdown01">
+                    <li><a class="dropdown-item" href="#">合同收入概况</a></li>
+                    <li><a class="dropdown-item" href="#">应收款表单</a></li>
+                    <li><a class="dropdown-item" href="#">超期款表单</a></li>
+                  </ul>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>

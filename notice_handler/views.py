@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.db.models import Q
 from django.http import Http404
 from contracts.models import Contract, Company, Host
 from payment.models import First_Payment_Notice, Periodical_Payment_Notice
@@ -25,3 +26,36 @@ def approve_contract(request, contract_id):
 
     generate_periodical_payment_notices(contract)
     return HttpResponseRedirect(reverse('contracts:unapproved_contracts'))
+
+@login_required
+def contract_manage_search(request):
+    if request.method == 'GET':
+        hc_res = request.GET.get('host_company_search')
+        bc_res = request.GET.get('buyer_company_search')
+        sl_res = request.GET.get('store_loc_code_search')
+        fn_res = request.GET.get('floor_num_search')
+        try:
+            if hc_res is None and bc_res is None and sl_res is None and fn_res is None:
+                return render(request,'search_contracts.html',{})
+            contract = Contract.objects.all()
+            if hc_res is not None:
+                contract = contract.filter(Q(host_company__company_name__icontains=hc_res))
+            if bc_res is not None:
+                contract = contract.filter(Q(buyer_company__company_name__icontains=bc_res) )
+            if sl_res is not None:
+                contract = contract.filter(Q(store_loc_code__icontains=sl_res))
+            if fn_res is not None:
+                contract = contract.filter(Q(floor_num__icontains=fn_res))
+            context = {"contracts":contract}
+            return render(request,'search_contracts.html',context)
+        except:
+            return render(request,'search_contracts.html',{})
+    return render(request,'search_contracts.html',{})
+
+@login_required
+def contract_manage_check(request, contract_id):
+    contract = Contract.objects.filter(id=contract_id)
+    first_pn = First_Payment_Notice.objects.filter(contract__id=contract_id)
+    periodical_pns = Periodical_Payment_Notice.objects.filter(contract__id=contract_id)
+    context = {'contracts' : contract, 'first_payment_notices' : first_pn, 'periodical_payment_notices':periodical_pns}
+    return render(request, 'contract_manage_check.html', context)
