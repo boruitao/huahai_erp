@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-3">查看缴款通知单</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+        <tr><th style="width: 50%">单据编号</th><td>{{notice.notice_id}}</td></tr>
+        <tr><th style="width: 50%">甲方公司</th><td>{{notice.hname}}</td></tr>
+        <tr><th style="width: 50%">甲方所在城市</th><td>{{notice.hcity}}</td></tr>
+        {% if notice.is_active %}
+        <tr><th style="width: 50%">状态</th><td>未收缴</td></tr>
+        {% else %}
+        <tr><th style="width: 50%">状态</th><td>已收缴</td></tr>
+        <tr><th style="width: 50%">收缴日期</th><td>{{notice.date_payed|date:'Y-m-d'}}</td></tr>
+        {% endif %}
+        <tr><th style="width: 50%">下单日期</th><td>{{notice.date_released|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">季度</th><td>{{notice.period_num}}</td></tr>
+        <tr><th style="width: 50%">经销商名称</th><td>{{notice.cname}}</td></tr>
+        <tr><th style="width: 50%">席位号</th><td>{{notice.loc_code}}</td></tr>
+        <tr><th style="width: 50%">付款截止日期</th><td>{{notice.deadline|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">缴款时段开始时间</th><td>{{notice.payment_start_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">缴款时段截止时间</th><td>{{notice.payment_end_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">费用总计</th><td>{{notice.total_amount}}</td></tr>
+    </table>
+</div>
+<hr class="my-4">
+<!-- <small class="d-block text-end">
+    <a href="{% url 'payment:edit_first_notice' notice.id %}">编辑单据</a>
+</small> -->
+<small class="d-block text-end">
+    <a href="{% url 'payment:print_periodical_notice' notice.id %}">打印此单据</a>
+</small>
+<small class="d-block text-end">
+    <a href="{% url 'payment:all_periodical_notices' %}">查看其他单据</a>
+</small>
+{% endblock content %}

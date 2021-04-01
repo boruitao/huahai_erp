@@ -1,10 +1,10 @@
-from payment.models import First_Payment_Notice, Periodical_Payment_Notice
+from notice.models import First_Notice, Periodical_Notice
 from django.db import models
 from contracts.models import Contract, Company
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-def generate_first_payment_notice(contract, num):
+def generate_first_notice(contract, num):
     rent = contract.monthly_price * contract.payment_cycle
     pf = contract.promotion_price
     pc = contract.payment_cycle
@@ -15,13 +15,13 @@ def generate_first_payment_notice(contract, num):
     today = date.today()
     nid = (today.year * 10000 + today.month * 100 + today.day) * 1000 + num
 
-    payment_notice = First_Payment_Notice.create_notice(contract, ddl, sdate, edate, rent, 
+    notice = First_Notice.create_notice(contract, ddl, sdate, edate, rent, 
     pc, pf, tta, nid, contract.buyer_company.company_name, contract.store_loc_code,
     contract.host_company.company_name, contract.host_company.city)
 
-    return payment_notice
+    return notice
 
-def generate_periodical_payment_notices(contract):
+def generate_periodical_notices(contract):
     #TODO: cover the case where number of dates are not exactly a full year
     payment_cycle = contract.payment_cycle
     sdate = contract.start_date
@@ -57,6 +57,6 @@ def generate_pp_notice(contract, sdate, edate, total_amount, period_num):
     date_released = sdate - relativedelta(days=15)
     ddl = sdate
     nid = contract.contract_id + str(period_num)
-    return Periodical_Payment_Notice.create_notice(contract, ddl, sdate, edate, date_released, 
+    return Periodical_Notice.create_notice(contract, ddl, sdate, edate, date_released, 
     total_amount, nid, contract.buyer_company.company_name, contract.store_loc_code, period_num,
     contract.host_company.company_name, contract.host_company.city)

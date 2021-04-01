@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'bootstrap_datepicker_plus',
     #my app
-    'payment.apps.PaymentConfig',
+    'notice.apps.NoticeConfig',
+    #'payment.apps.PaymentConfig',
     'contracts.apps.ContractsConfig',
     'users.apps.UsersConfig',
     'notice_handler.apps.NoticeHandlerConfig',

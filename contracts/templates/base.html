@@ -55,15 +55,15 @@
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同管理</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="{% url 'contracts:all_contracts' %}">查看合同</a></li>
-                    <li><a class="dropdown-item" href="{% url 'notice_handler:manage_search_contract' %}">缴款方式修改</a></li>
-                    <li><a class="dropdown-item" href="#">修改审核#</a></li>
+                    <li><a class="dropdown-item" href="{% url 'notice_handler:manage_search_contract' %}">补充协议</a></li>
+                    <li><a class="dropdown-item" href="#">协议审核#</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">费用收缴单</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                    <li><a class="dropdown-item" href="{% url 'payment:active_first_payment_notices' %}">首次缴款单</a></li>
-                    <li><a class="dropdown-item" href="{% url 'payment:all_periodical_payment_notices' %}">缴款通知单</a></li>
+                    <li><a class="dropdown-item" href="{% url 'notice:active_first_notices' %}">首次缴款单</a></li>
+                    <li><a class="dropdown-item" href="{% url 'notice:all_periodical_notices' %}">缴款通知单</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">

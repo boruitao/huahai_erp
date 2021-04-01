@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.http import Http404
 from .models import Contract, Company, Host, Contract_Status
-from payment.models import First_Payment_Notice, Periodical_Payment_Notice
+from notice.models import First_Notice, Periodical_Notice
 from .forms import ContractForm, CompanyForm, HostForm
 from datetime import date
 #from contracts.form_generator import generate_first_payment_notice, generate_periodical_payment_notices

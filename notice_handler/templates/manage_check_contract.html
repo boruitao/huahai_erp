@@ -37,7 +37,7 @@
                 已完成
                 {% endif %}
             </td>
-              <td><a href="{% url 'notice_handler:manage_check_contract' contract.id %}">合同缴款明细</a></td>
+              <td><a href="{% url 'notice_handler:manage_check_contract' contract.id %}">查看并修改此合同</a></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -59,7 +59,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for notice in first_payment_notices %}
+            {% for notice in first_notices %}
             <tr>
             <td>{{notice.notice_id}}</td>
             <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
@@ -67,7 +67,7 @@
             <td>{{notice.cname}}</td>
             <td>{{notice.loc_code}}</td>
             <td>{{notice.total_amount}}</td>
-            <td><a href="{% url 'payment:check_first_payment_notice' notice.id %}">查看此单</a></td>
+            <td><a href="{% url 'notice:edit_first_notice' notice.id %}">查看并修改此单</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -90,7 +90,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for notice in periodical_payment_notices %}
+            {% for notice in periodical_notices %}
             <tr>
             <td>{{notice.notice_id}}</td>
             <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
@@ -99,7 +99,7 @@
             <td>{{notice.loc_code}}</td>
             <td>{{notice.period_num}}</td>
             <td>{{notice.total_amount}}</td>
-            <td><a href="{% url 'payment:check_periodical_payment_notice' notice.id %}">查看此单</a></td>
+            <td><a href="{% url 'notice:check_periodical_notice' notice.id %}">查看并修改此单</a></td>
             </tr>
             {% endfor %}
         </tbody>
