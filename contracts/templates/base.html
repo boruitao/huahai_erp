@@ -67,6 +67,14 @@
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">收款单</a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdown01">
+                    <li><a class="dropdown-item" href="{% url 'payments:all_payments' %}">查看收款单</a></li>
+                    <li><a class="dropdown-item" href="{% url 'payments:payment_search_contract' %}">新增收款单</a></li>
+                    <li><a class="dropdown-item" href="#">收款单审核#</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">财务表单</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="#">合同收入概况#</a></li>

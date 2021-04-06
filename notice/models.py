@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 from contracts.models import Company, Contract
-
 class PN_Status(models.IntegerChoices):
     ACTIVE = 0
     OVERDUE = 1

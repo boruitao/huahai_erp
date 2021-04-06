@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load bootstrap3 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+
+{% block content %}
+<div class="col-md-7 col-lg-8">
+    <h4 class="mb-3">新增收款</h4>
+    <form method="post" action="{% url 'payments:create_payment' notice.id is_first %}">
+        {% csrf_token %}
+        <div class="row g-3">
+        {{ form.non_field_errors }}
+        <div class="fieldWrapper col-sm-6">
+            {{ form.payment_id.errors }}
+            <label for="{{ form.payment_id.id_for_label }}" class="form-label">收款单编号：</label>
+            {{ form.payment_id }}
+        </div>
+        <div class="fieldWrapper col-sm-6">
+            {{ form.date_received.errors }}
+            <label for="{{ form.date_received.id_for_label }}" class="form-label">收款时间（年-月-日，如1970-02-28）:</label>
+            {{ form.date_received }}
+        </div>
+        <div class="fieldWrapper col-sm-6">
+            {{ form.amount.errors }}
+            <label for="{{ form.amount.id_for_label }}" class="form-label">付款金额：</label>
+            {{ form.amount }}
+        </div>
+        <div class="fieldWrapper col-sm-6">
+            {{ form.pay_method.errors }}
+            <label for="{{ form.pay_method.id_for_label }}" class="form-label">付款方式：</label>
+            {{ form.pay_method }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.reason.errors }}
+            <label for="{{ form.reason.id_for_label }}" class="form-label">付款事由：</label>
+            {{ form.reason }}
+        </div>
+        <hr class="my-4">
+        <button name="submit" class="btn btn-success">完成</button>
+        <input type="hidden" name="next" value="{% url 'contracts:home' %}" />
+        </div>
+    </form>
+</div>
+{% endblock content %}

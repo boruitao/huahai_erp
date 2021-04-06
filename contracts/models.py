@@ -35,9 +35,11 @@ class Host(models.Model):
 class Contract(models.Model): #合同
     buyer_company = models.ForeignKey(Company, on_delete=models.CASCADE)
     host_company = models.ForeignKey(Host, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING) # 合同创建者
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='%(class)s_requests_created') # 合同创建者
+    approved_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='%(class)s_requests_approved',to_field='username', default='btao')
     status = models.IntegerField(default=Contract_Status.CREATED, choices=Contract_Status.choices) #状态
     date_added = models.DateTimeField(auto_now_add=True) #合同创建日期
+    date_approved = models.DateTimeField('date_approved', null=True)
     contract_id = models.CharField(default='无编号（未审核通过）', max_length=13) #合同编号
     start_date = models.DateField('start date') # 开始日期
     end_date = models.DateField('end date') # 截止日期

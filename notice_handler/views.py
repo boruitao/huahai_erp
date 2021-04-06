@@ -12,9 +12,12 @@ from notice_handler.notice_creator import generate_first_notice, generate_period
 # Create your views here.
 @login_required
 def approve_contract(request, contract_id):
+    today = date.today()
     contract = Contract.objects.get(id=contract_id)
     # change contract status
     contract.status = Contract_Status.APPROVED
+    contract.approved_by = request.user
+    contract.date_approved = today
 
     # assign contract id
     date_str = (contract.sign_date.year - 2000) * 10000 + contract.sign_date.month * 100 + contract.sign_date.day
@@ -23,7 +26,6 @@ def approve_contract(request, contract_id):
     contract.save()
     
     # generate corresponding notices
-    today = date.today()
     count_notice = First_Notice.objects.filter(date_released__year=today.year, date_released__month=today.month, date_released__day=today.day).count()+1
     first_pn = generate_first_notice(contract, count_notice)
     first_pn.save()
@@ -64,9 +66,9 @@ def manage_search_contract(request):
     return render(request,'manage_search_contracts.html',{})
 
 @login_required
-def manage_check_contract(request, contract_id):
+def manage_check_notices(request, contract_id):
     contract = Contract.objects.filter(id=contract_id)
     first_pn = First_Notice.objects.filter(contract__id=contract_id)
     periodical_pns = Periodical_Notice.objects.filter(contract__id=contract_id)
     context = {'contracts' : contract, 'first_notices' : first_pn, 'periodical_notices':periodical_pns}
-    return render(request, 'manage_check_contract.html', context)
+    return render(request, 'manage_check_notices.html', context)

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    <h4 class="mb-3">请选择合同</h4>
-    <form method="get" action="{% url 'notice_handler:manage_search_contract' %}">
+    <h4 class="mb-3">新增付款单</h4>
+    <form method="get" action="{% url 'payments:payment_search_contract' %}">
         {% csrf_token %}
         <div class="row g-4">
             <div class="fieldWrapper col-sm-3">
@@ -23,7 +23,7 @@
                 
             </div>
             <div class="col-sm-12 text-end">
-                <button name="submit" class="btn btn-success">搜索</button>
+                <button name="submit" class="btn btn-success">搜索合同</button>
             </div>
             <!-- <input type="hidden" name="next" value="{% url 'contracts:home' %}" /> -->
         </div>
@@ -67,7 +67,7 @@
                 已完成
                 {% endif %}
             </td>
-              <td><a href="{% url 'notice_handler:manage_check_notices' contract.id %}">合同缴款明细</a></td>
+              <td><a href="{% url 'payments:payment_check_notices' contract.id %}">查看缴款单</a></td>
             </tr>
             {% endfor %}
           </tbody>
