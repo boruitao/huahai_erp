@@ -18,8 +18,8 @@ def generate_first_notice(contract, num):
     notice = First_Notice.create_notice(contract, ddl, sdate, edate, rent, 
     pc, pf, tta, nid, contract.buyer_company.company_name, contract.store_loc_code,
     contract.host_company.company_name, contract.host_company.city)
-
-    return notice
+    notice.to_be_payed = tta
+    notice.save()
 
 def generate_periodical_notices(contract):
     #TODO: cover the case where number of dates are not exactly a full year
@@ -34,22 +34,17 @@ def generate_periodical_notices(contract):
     count_months = payment_cycle
     count = 2
     rent = contract.monthly_price * contract.payment_cycle
-    print(sdate)
-    print(edate)
-    print(count_months)
-    print(num_months)
     while count_months < num_months:
-        print("entering while loop")
         new_sdate = sdate + relativedelta(months=count_months)
         new_edate = sdate + relativedelta(months=(count_months+payment_cycle)) - relativedelta(days=1)
-        print(new_sdate)
-        print(new_edate)
         count_months = count_months + payment_cycle
         if new_edate > edate:
             pp_notice = generate_pp_notice(contract, new_sdate, edate, rent, count)
+            pp_notice.to_be_payed = rent
             pp_notice.save()
         else:
             pp_notice = generate_pp_notice(contract, new_sdate, new_edate, rent, count)
+            pp_notice.to_be_payed = rent
             pp_notice.save()
         count = count + 1
 

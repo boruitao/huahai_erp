@@ -11,7 +11,7 @@
             <th>经销商名称</th>
             <th>席位号</th>
             <th>费用总计</th>
-            <th></th>
+            <th>还需支付</th>
             <th></th>
         </tr>
       </thead>
@@ -24,13 +24,8 @@
           <td>{{notice.cname}}</td>
           <td>{{notice.loc_code}}</td>
           <td>{{notice.total_amount}}</td>
+          <td>{{notice.to_be_payed}}</td>
           <td><a href="{% url 'notice:check_first_notice' notice.id %}">查看此单</a></td>
-          <td>
-            <form method="post" action="{% url 'notice:approve_first_notice' notice.id %}">
-                {% csrf_token %}
-                <button name="submit" class="btn-success" onclick="return confirm('您确定收缴此通知单吗（编号：{{ notice.id}}）？');">确认收缴</button>
-            </form>
-          </td>
         </tr>
         {% endfor %}
       </tbody>

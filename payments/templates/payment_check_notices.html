@@ -51,6 +51,7 @@
                 <th>经销商名称</th>
                 <th>席位号</th>
                 <th>费用总计</th>
+                <th>还需支付</th>
                 <th></th>
             </tr>
         </thead>
@@ -63,6 +64,7 @@
             <td>{{notice.cname}}</td>
             <td>{{notice.loc_code}}</td>
             <td>{{notice.total_amount}}</td>
+            <td>{{notice.to_be_payed}}</td>
             <td><a href="{% url 'payments:create_payment' notice.id 0 %}">新增收款</a></td>
             </tr>
             {% endfor %}
@@ -82,6 +84,7 @@
                 <th>席位号</th>
                 <th>缴款季度</th>
                 <th>费用总计</th>
+                <th>还需支付</th>
                 <th></th>
             </tr>
         </thead>
@@ -95,6 +98,7 @@
             <td>{{notice.loc_code}}</td>
             <td>{{notice.period_num}}</td>
             <td>{{notice.total_amount}}</td>
+            <td>{{notice.to_be_payed}}</td>
             <td><a href="{% url 'payments:create_payment' notice.id 1 %}">新增收款</a></td>
             </tr>
             {% endfor %}

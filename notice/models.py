@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 from contracts.models import Company, Contract
-class PN_Status(models.IntegerChoices):
+class Notice_Status(models.IntegerChoices):
     ACTIVE = 0
     OVERDUE = 1
     PAYED = 2
@@ -14,21 +14,22 @@ class Notice(models.Model):
     payment_start_date = models.DateField('payment start date')
     payment_end_date = models.DateField('payment end date')
     notice_id = models.CharField(max_length=200)
-    status = models.IntegerField(default=PN_Status.ACTIVE, choices=PN_Status.choices)
+    status = models.IntegerField(default=Notice_Status.ACTIVE, choices=Notice_Status.choices)
     cname = models.CharField(max_length=200,null=True)
     hname = models.CharField(max_length=200,null=True)
     hcity = models.CharField(max_length=200,null=True)
     loc_code = models.CharField(max_length=200,null=True)
     date_payed = models.DateField('date_payed', null=True)
+    to_be_payed = models.DecimalField(max_digits=20, decimal_places=2,null=True)
 
     class Meta:
         abstract = True
 
 class First_Notice(Notice):
-    promotion_fee = models.DecimalField(max_digits=20, decimal_places=3,null=True)
+    promotion_fee = models.DecimalField(max_digits=20, decimal_places=2,null=True)
     payment_cycle = models.IntegerField('payment cycle')
-    total_rent = models.DecimalField(max_digits=20, decimal_places=3,null=True)
-    total_amount = models.DecimalField(max_digits=20, decimal_places=3,null=True)
+    total_rent = models.DecimalField(max_digits=20, decimal_places=2,null=True)
+    total_amount = models.DecimalField(max_digits=20, decimal_places=2,null=True)
     date_released = models.DateField(auto_now_add=True)
 
     @classmethod
@@ -39,7 +40,7 @@ class First_Notice(Notice):
         return payment_notice
 
 class Periodical_Notice(Notice):
-    total_amount = models.DecimalField(max_digits=20, decimal_places=3,null=True)
+    total_amount = models.DecimalField(max_digits=20, decimal_places=2,null=True)
     period_num = models.IntegerField('period_num') # 季度
     date_released = models.DateField('date_released')
 

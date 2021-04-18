@@ -1,6 +1,6 @@
 {% load static %}
 {% load bootstrap3 %} 
-
+{% load humanize %}
 <!doctype html>
 <html>
     <head>
@@ -42,7 +42,7 @@
             <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                  <a class="nav-link active" aria-current="page" href="#">首页</a>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同签订</a>
@@ -62,7 +62,7 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">费用收缴单</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                    <li><a class="dropdown-item" href="{% url 'notice:active_first_notices' %}">首次缴款单</a></li>
+                    <li><a class="dropdown-item" href="{% url 'notice:all_first_notices' %}">首次缴款单</a></li>
                     <li><a class="dropdown-item" href="{% url 'notice:all_periodical_notices' %}">缴款通知单</a></li>
                   </ul>
                 </li>
@@ -71,25 +71,25 @@
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="{% url 'payments:all_payments' %}">查看收款单</a></li>
                     <li><a class="dropdown-item" href="{% url 'payments:payment_search_contract' %}">新增收款单</a></li>
-                    <li><a class="dropdown-item" href="#">收款单审核#</a></li>
+                    <li><a class="dropdown-item" href="{% url 'payments:verify_payments' %}">收款单审核</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">财务表单</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="#">合同收入概况#</a></li>
-                    <li><a class="dropdown-item" href="#">应收款表单#</a></li>
-                    <li><a class="dropdown-item" href="#">超期款表单#</a></li>
+                    <li><a class="dropdown-item" href="{% url 'worksheet:check_receivables' %}">应收款表单</a></li>
+                    <li><a class="dropdown-item" href="{% url 'worksheet:check_overdue' %}">超期款表单</a></li>
                   </ul>
                 </li>
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="#">Action</a></li>
                     <li><a class="dropdown-item" href="#">Another action</a></li>
                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                   </ul>
-                </li>
+                </li> -->
               </ul>
               
               <form class="d-flex">

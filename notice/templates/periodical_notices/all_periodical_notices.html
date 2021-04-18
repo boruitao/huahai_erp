@@ -7,11 +7,13 @@
         <tr>
             <th>单据编号</th>
             <th>下单日期</th>
+            <th>截止日期</th>
             <th>缴款时段</th>
             <th>经销商名称</th>
             <th>席位号</th>
             <th>缴款季度</th>
             <th>费用总计</th>
+            <th>还需支付</th>
             <th></th>
         </tr>
       </thead>
@@ -20,11 +22,13 @@
         <tr>
           <td>{{notice.notice_id}}</td>
           <td>{{notice.date_released|date:'Y-m-d'}}</td>
+          <td>{{notice.deadline|date:'Y-m-d'}}</td>
           <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
           <td>{{notice.cname}}</td>
           <td>{{notice.loc_code}}</td>
           <td>{{notice.period_num}}</td>
           <td>{{notice.total_amount}}</td>
+          <td>{{notice.to_be_payed}}</td>
           <td><a href="{% url 'notice:check_periodical_notice' notice.id %}">查看此单</a></td>
         </tr>
         {% endfor %}

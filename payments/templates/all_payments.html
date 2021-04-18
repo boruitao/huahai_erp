@@ -12,6 +12,7 @@
             <th>收款事由</th>
             <th>金额</th>
             <th>公司名</th>
+            <th>状态</th>
             <th></th>
           </tr>
         </thead>
@@ -25,10 +26,20 @@
             <td>{{payment.reason}}</td>
             <td>{{payment.amount}}</td>
             <td>{{payment.cname}}</td>
+            <td>{% if payment.status == 0 %}
+              已审核通过
+              {% elif payment.status == 1 %}
+              审核未通过
+              {% elif payment.status == 2 %}
+              已创立
+              {% elif payment.status == 3 %}
+              已取消
+              {% endif %}
+          </td>
             <td>{% if payment.is_first %}
-                <a href="{% url 'notice:check_first_notice' payment.first_notice.id %}">查看合同</a>
+                <a href="{% url 'notice:check_first_notice' payment.first_notice.id %}">查看缴款单</a>
                 {% elif payment.is_per %}
-                <a href="{% url 'notice:check_periodical_notice' payment.first_notice.id %}">查看合同</a>
+                <a href="{% url 'notice:check_periodical_notice' payment.per_notice.id %}">查看缴款单</a>
                 {% endif %}
             </td>
           </tr>

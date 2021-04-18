@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<script type="text/javascript" src="{% static 'js/tableToExcel.js' %}"></script>
+<h4 class="mb-3">{{title}}:</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+            <th>单据编号</th>
+            <th>下单日期</th>
+            <th>截止日期</th>
+            <th>缴款时段</th>
+            <th>经销商名称</th>
+            <th>席位号</th>
+            <th>费用总计</th>
+            <!-- <th></th> -->
+            <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for notice in notices %}
+        <tr>
+          <td>{{notice.notice_id}}</td>
+          <td>{{notice.date_released|date:'Y-m-d'}}</td>
+          <td>{{notice.deadline|date:'Y-m-d'}}</td>
+          <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
+          <td>{{notice.cname}}</td>
+          <td>{{notice.loc_code}}</td>
+          <td>{{notice.total_amount}}</td>
+          <td><a href="{% url 'notice:check_first_notice' notice.id %}">查看此单</a></td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td style="font-weight: bold;">总计</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{total_amount.total_amount__sum|floatformat:2 }}</td>
+            <td></td>
+          </tr>
+      </tbody>
+    </table>
+</div>
+<hr class="my-4">
+  <h4 class="mb-3">搜索</h4>
+    <form method="get" action="{% url 'worksheet:search_overdue_notices' %}">
+        {% csrf_token %}
+        <div class="row g-4">
+            <div class="fieldWrapper col-sm-3">
+                <label for="year_searchlabel" class="form-label">年份：</label>
+                <input name="year_search" type="number" placeholder="" class='form-control'>
+            </div>
+            <div class="fieldWrapper col-sm-3">
+                <label for="month_searchlabel" class="form-label">月份：</label>
+                <input name="month_search" type="number" placeholder="" class='form-control'>  
+            </div>
+            <div class="col-sm-12 text-end">
+                <button name="submit" class="btn btn-success">搜索</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}

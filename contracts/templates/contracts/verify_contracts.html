@@ -26,8 +26,8 @@
           <td>{{contract.business}}</td>
           <td>{{contract.buyer_company.company_name}}</td>
           <td>{{contract.unit_price}}</td>
-          <td>{{contract.start_date}}</td>
-          <td>{{contract.end_date}}</td>
+          <td>{{contract.start_date|date:'Y-m-d'}}</td>
+          <td>{{contract.end_date|date:'Y-m-d'}}</td>
           <td>
             <form method="post" action="{% url 'notice_handler:approve_contract' contract.id %}">
                 {% csrf_token %}
@@ -47,7 +47,7 @@
     </table>
 </div>
   <small class="d-block text-end">
-    <a href="{% url 'contracts:all_contracts' %}">查看所有合同</a>
+    <a href="{% url 'contracts:all_contracts' %}">查看其他合同</a>
   </small>
 
 {% endblock content %}

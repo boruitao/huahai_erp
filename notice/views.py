@@ -1,4 +1,4 @@
-from .models import First_Notice, Periodical_Notice, PN_Status
+from .models import First_Notice, Periodical_Notice, Notice_Status
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -12,11 +12,11 @@ from notice.excel_helper import create_first_notice, create_periodical_notice
 
 # Create your views here.
 @login_required
-def active_first_notices(request):
-    active_notices = First_Notice.objects.filter(status=PN_Status.ACTIVE)
-    inactive_notices = First_Notice.objects.filter(status=PN_Status.PAYED)
+def all_first_notices(request):
+    active_notices = First_Notice.objects.filter(status=Notice_Status.ACTIVE)
+    inactive_notices = First_Notice.objects.filter(status=Notice_Status.PAYED)
     context = {'notices': {'active' : active_notices, 'inactive' : inactive_notices}}
-    return render(request, 'first_notices/active_first_notices.html', context)
+    return render(request, 'first_notices/all_first_notices.html', context)
 
 @login_required
 def check_first_notice(request, notice_id):
@@ -50,14 +50,14 @@ def print_first_notice(request, notice_id):
    # return HttpResponseRedirect(reverse('payment:active_notices'))
     return response
 
-@login_required
-def approve_first_notice(request, notice_id):
-    #TODO: logic behind this
-    notice = First_Notice.objects.get(id=notice_id)
-    notice.status = PN_Status.PAYED
-    notice.date_payed = date.today()
-    notice.save()
-    return HttpResponseRedirect(reverse('payment:active_first_notices'))
+# @login_required
+# def approve_first_notice(request, notice_id):
+#     #TODO: logic behind this
+#     notice = First_Notice.objects.get(id=notice_id)
+#     notice.status = Notice_Status.PAYED
+#     notice.date_payed = date.today()
+#     notice.save()
+#     return HttpResponseRedirect(reverse('payment:active_first_notices'))
 
 # @login_required
 # def all_first_notices(request):

@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
+{% load humanize %}
+
 <h4 class="mb-3">查看首次缴款单</h4>
 <div class="table-responsive table-bordered">
     <table class="table table-striped table-sm">
         <tr><th style="width: 50%">单据编号</th><td>{{notice.notice_id}}</td></tr>
         <tr><th style="width: 50%">甲方公司</th><td>{{notice.hname}}</td></tr>
         <tr><th style="width: 50%">甲方所在城市</th><td>{{notice.hcity}}</td></tr>
-        {% if notice.is_active %}
+        {% if notice.status == 0 %}
         <tr><th style="width: 50%">状态</th><td>未收缴</td></tr>
-        {% else %}
+        {% elif notice.status == 1 %}
+        <tr><th style="width: 50%">状态</th><td>已超期</td></tr>
+        {% elif notice.status == 2 %}
         <tr><th style="width: 50%">状态</th><td>已收缴</td></tr>
         <tr><th style="width: 50%">收缴日期</th><td>{{notice.date_payed|date:'Y-m-d'}}</td></tr>
         {% endif %}
@@ -20,17 +24,18 @@
         <tr><th style="width: 50%">缴款时段截止时间</th><td>{{notice.payment_end_date|date:'Y-m-d'}}</td></tr>
         <tr><th style="width: 50%">租赁费</th><td>{{notice.total_rent}} ({{notice.payment_cycle}}个月)</td></tr>
         <tr><th style="width: 50%">统一推广费</th><td>{{notice.promotion_fee}}</td></tr>
-        <tr><th style="width: 50%">费用总计</th><td>{{notice.total_amount}}</td></tr>
+        <tr><th style="width: 50%">费用总计</th><td>¥ {{notice.total_amount |intcomma}}</td></tr>
+        <tr><th style="width: 50%">还需支付</th><td>¥ {{notice.to_be_payed |intcomma}}</td></tr>
     </table>
 </div>
 <hr class="my-4">
 <!-- <small class="d-block text-end">
-    <a href="{% url 'payment:edit_first_notice' notice.id %}">编辑单据</a>
+    <a href="{% url 'notice:edit_first_notice' notice.id %}">编辑单据</a>
 </small> -->
 <small class="d-block text-end">
-    <a href="{% url 'payment:print_first_notice' notice.id %}">打印此单据</a>
+    <a href="{% url 'notice:print_first_notice' notice.id %}">打印此单据</a>
 </small>
 <small class="d-block text-end">
-    <a href="{% url 'payment:active_first_notices' %}">查看其他单据</a>
+    <a href="{% url 'notice:all_first_notices' %}">查看其他单据</a>
 </small>
 {% endblock content %}

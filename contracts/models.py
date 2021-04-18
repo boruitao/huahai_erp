@@ -47,16 +47,16 @@ class Contract(models.Model): #合同
     floor_num = models.IntegerField('floor number') # 楼层
     store_loc_code = models.CharField(max_length=200)# 铺位号
     region = models.CharField(max_length=200) # 铺位所在区
-    unit_price = models.DecimalField(max_digits=20, decimal_places=3) # 单价
-    area = models.DecimalField(max_digits=20, decimal_places=3) # 面积
-    monthly_price = models.DecimalField(max_digits=20, decimal_places=3) # 月总价
-    yearly_price = models.DecimalField(max_digits=20, decimal_places=3) # 全年总价
+    unit_price = models.DecimalField(max_digits=20, decimal_places=2) # 单价
+    area = models.DecimalField(max_digits=20, decimal_places=2) # 面积
+    monthly_price = models.DecimalField(max_digits=20, decimal_places=2) # 月总价
+    yearly_price = models.DecimalField(max_digits=20, decimal_places=2) # 全年总价
     payment_cycle = models.IntegerField('payment cycle') # 收款周期按月计
     business = models.CharField(max_length=200) # 经营项目
     GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'), ('U', 'Unisex/Parody'))
     category = models.CharField(max_length=200,choices=GENDER_CHOICES) # 业态
-    promotion_price = models.DecimalField(max_digits=20, decimal_places=3) # 推广费
-    deposit = models.DecimalField(max_digits=20, decimal_places=3) # 铺位总定金
-    perf_bond = models.DecimalField(max_digits=20, decimal_places=3) # 履约保证金总价
-    water_bill = models.DecimalField(max_digits=20, decimal_places=3) # 每月单价水费
-    elect_bill = models.DecimalField(max_digits=20, decimal_places=3) # 每月单价电费
+    promotion_price = models.DecimalField(max_digits=20, decimal_places=2) # 推广费
+    deposit = models.DecimalField(max_digits=20, decimal_places=2) # 铺位总定金
+    perf_bond = models.DecimalField(max_digits=20, decimal_places=2) # 履约保证金总价
+    water_bill = models.DecimalField(max_digits=20, decimal_places=2) # 每月单价水费
+    elect_bill = models.DecimalField(max_digits=20, decimal_places=2) # 每月单价电费

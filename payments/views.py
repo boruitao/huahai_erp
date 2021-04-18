@@ -8,27 +8,23 @@ from django.db.models import Q
 from django.urls import reverse
 from django.http import Http404
 from .forms import PaymentForm
-from .models import Payment
+from .models import Payment, Payment_Status
 from datetime import date
 # Create your views here.
 @login_required
 def create_payment(request, notice_id, is_first):
-    notice = First_Notice.objects.get(id=notice_id)
-    # if is_first == 0:
-    #     notice = First_Notice.objects.get(id=notice_id)
-    if is_first == 1:
-        notice = Periodical_Notice.objects.get(id=notice_id)
+    notice = First_Notice.objects.get(id=notice_id) if is_first == 0 else Periodical_Notice.objects.get(id=notice_id)
     if request.method != 'POST':
         form = PaymentForm()
     else:
         form = PaymentForm(request.POST)
         if form.is_valid():
             new_payment = form.save(commit=False)
-            if is_first == 0:
-                new_payment.first_notice = notice
+            if is_first == '0':
+                new_payment.first_notice = First_Notice.objects.get(id=notice_id)
                 new_payment.is_first = True
-            elif is_first == 1:
-                new_payment.per_notice = notice
+            elif is_first == '1':
+                new_payment.per_notice = Periodical_Notice.objects.get(id=notice_id)
                 new_payment.is_per = True
             new_payment.created_by = request.user
             new_payment.cname = notice.cname
@@ -94,6 +90,23 @@ def all_payments(request):
     context = {'payments' : payments}
     return render(request, 'all_payments.html', context)
 
+@login_required
+def verify_payments(request):
+    payments = Payment.objects.filter(status=Payment_Status.CREATED).order_by('-date_added')
+    context = {'payments': payments}
+    return render(request, 'verify_payments.html', context)
+
+@login_required
+def verify_single_payment(request, payment_id):
+    payment = Payment.objects.get(id=payment_id)
+    context = {'payment': payment}
+    if payment.is_first:
+        notice = First_Notice.objects.get(id=payment.first_notice.id)
+        context = {'payment':payment, 'notice':notice}
+    elif payment.is_per:
+        notice = Periodical_Notice.objects.get(id=payment.per_notice.id)
+        context = {'payment':payment, 'notice':notice}
+    return render(request, 'verify_single_payment.html', context)
 # @login_required
 # def all_created_contracts(request):
 #     contracts = Contract.objects.filter(status=Contract_Status.CREATED).order_by('-sign_date')

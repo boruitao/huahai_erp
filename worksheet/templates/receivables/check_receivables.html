@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<!-- <script type="text/javascript" src="{% static 'js/xlsx.full.min.js' %}"></script> -->
+<script type="text/javascript" src="{% static 'js/tableToExcel.js' %}"></script>
+
+<h4 class="mb-3">搜索时间段</h4>
+<form method="get" action="{% url 'worksheet:search_receivables_notices' %}">
+    {% csrf_token %}
+    <div class="row g-4">
+        <div class="fieldWrapper col-sm-3">
+            <label for="year_searchlabel" class="form-label">年份：</label>
+            <input name="year_search" type="number" placeholder="" class='form-control'>
+        </div>
+        <div class="fieldWrapper col-sm-3">
+            <label for="month_searchlabel" class="form-label">月份：</label>
+            <input name="month_search" type="number" placeholder="" class='form-control'>  
+        </div>
+        <div class="col-sm-12 text-end">
+            <button name="submit" class="btn btn-success">搜索</button>
+        </div>
+    </div>
+</form>
+<hr class="my-4">
+<h4 class="mb-3">{{title}}:</h4>
+<div class="table-responsive table-bordered">
+    <div class="col-sm-12 text-end">
+        <!-- <button class="btn btn-success mb-3" onclick="ExportExcel('xlsx')">打印此单</button> -->
+        <!-- <button class="btn btn-success mb-3" onclick="exportTableToExcel('printable')">打印此单</button> -->
+        <button class="btn btn-success mb-3" id="btnExport" onclick="exportReportToExcel(this)">打印此单</button>
+    </div>
+    <table class="table table-striped table-sm" data-cols-width="5,30,10,10,15,15,15,15,5" id="printable">
+      <thead>
+        <tr><th data-a-h="center" colspan="10" style="text-align: center;">{{title}}</th></tr>
+        <tr>
+            <th data-a-h="center">序号</th>
+            <th data-a-h="center">经销商名称</th>
+            <th data-a-h="center">席位号</th>
+            <th data-a-h="center">金额</th>
+            <th data-a-h="center">下单日期</th>
+            <th data-a-h="center">截止日期</th>
+            <th data-a-h="center">缴款开始时间</th>
+            <th data-a-h="center">缴款结束时间</th>
+            <th data-a-h="center">季度</th>
+            <th data-exclude="true"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for notice in notices %}
+        <tr>
+          <td data-t="n"  data-a-h="center">{{ forloop.counter }}</td>
+          <td data-a-h="center">{{notice.cname}}</td>
+          <td data-a-h="center">{{notice.loc_code}}</td>
+          <td data-a-h="center" data-t="n">{{notice.total_amount}}</td>
+          <td data-t="d" data-a-h="center">{{notice.date_released|date:'Y-m-d'}}</td>
+          <td data-t="d" data-a-h="center">{{notice.deadline|date:'Y-m-d'}}</td>
+          <td data-t="d" data-a-h="center">{{notice.payment_start_date|date:'Y-m-d'}}</td>
+          <td data-t="d" data-a-h="center">{{notice.payment_end_date|date:'Y-m-d'}}</td>
+          <td data-a-h="center" data-t="n">{{notice.period_num}}</td>
+          <td data-a-h="center" data-exclude="true"><a href="{% url 'notice:check_first_notice' notice.id %}">查看此单</a></td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td data-a-h="center" style="font-weight: bold;">总计</td>
+            <td></td>
+            <td></td>
+            <td data-a-h="center" data-t="n">{{total_amount.total_amount__sum|floatformat:2 }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td></td>
+            <td></td> -->
+          </tr>
+      </tbody>
+    </table>
+</div>
+</div>
+<script type="text/javascript">
+    function exportReportToExcel() {
+        let table = document.getElementsByTagName("table");// you can use document.getElementById('tableId') as well by providing id to the table tag
+        TableToExcel.convert(table[0], { // html code may contain multiple tables so here we are refering to 1st table tag
+            name: `{{title}}.xlsx`, // fileName you could use any name
+            sheet: {
+            name: '终表' // sheetName
+            }
+        });
+    }
+</script>
+<!-- <script type="text/javascript">
+    function ExportExcel(type, fn, dl) {
+       var elt = document.getElementById('printable');
+       var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+       return dl ?
+          XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+          XLSX.writeFile(wb, fn || ('{{title}}.' + (type || 'xlsx')));
+    }
+</script> -->
+<!-- <script>
+    function exportTableToExcel(tableID, filename = '{{title}}'){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    filename = filename?filename+'.xls':'excel_data.xls';
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // Setting the file name
+        downloadLink.download = filename;
+        //triggering the function
+        downloadLink.click();
+    }
+}
+</script> -->
+{% endblock content %}
