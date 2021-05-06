@@ -15,42 +15,55 @@
     </nav>
   </div>
   <div class="table-responsive table-bordered">
-      <table class="table table-striped table-sm">
-        <thead>
-          <tr>
-            <th>编号</th>
-            <th>签署日期</th>
-            <th>铺位号</th>
-            <th>铺位经营项目</th>
-            <th>公司名</th>
-            <th>月租金(每㎡)</th>
-            <th>开始日期</th>
-            <th>截止日期</th>
-            <th>状态</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for contract in contracts %}
-          <tr>
-            <td>{{contract.id}}</td>
-            <td>{{contract.sign_date|date:'Y-m-d'}}</td>
-            <td>{{contract.store_loc_code}}</td>
-            <td>{{contract.business}}</td>
-            <td>{{contract.buyer_company.company_name}}</td>
-            <td>{{contract.unit_price}}</td>
-            <td>{{contract.start_date|date:'Y-m-d'}}</td>
-            <td>{{contract.end_date|date:'Y-m-d'}}</td>
-            <td>已完成</td>
-            <td><a href="{% url 'contracts:check_contract' contract.id %}">查看合同</a></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th>编号</th>
+          <th>签署日期</th>
+          <th>铺位号</th>
+          <th>铺位经营项目</th>
+          <th>公司名</th>
+          <th>月租金</th>
+          <th>年金额</th>
+          <th>总金额</th>
+          <th>开始日期</th>
+          <th>截止日期</th>
+          <th>状态</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for contract in contracts %}
+        <tr>
+          <td>{{contract.id}}</td>
+          <td>{{contract.sign_date|date:'Y-m-d'}}</td>
+          <td>{{contract.store_loc_code}}</td>
+          <td>{{contract.business}}</td>
+          <td>{{contract.buyer_company.company_name}}</td>
+          <td>{{contract.monthly_price}}</td>
+          <td>{{contract.yearly_price}}</td>
+          <td>{{contract.total_price}}</td>
+          <td>{{contract.start_date|date:'Y-m-d'}}</td>
+          <td>{{contract.end_date|date:'Y-m-d'}}</td>
+          <td>{% if contract.status == 0 %}
+              已创立
+              {% elif contract.status == 1 %}
+              已审核通过
+              {% elif contract.status == 2 %}
+              审核未通过
+              {% elif contract.status == 3 %}
+              已完成
+              {% endif %}
+          </td>
+          <td><a href="{% url 'contracts:check_contract' contract.id %}">查看合同</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <hr class="my-4">
   <h4 class="mb-3">搜索此页</h4>
-    <form method="get" action="{% url 'contracts:search_contracts' 3 %}">
+    <form method="get" action="{% url 'contracts:search_contracts' 1 %}">
         {% csrf_token %}
         <div class="row g-4">
             <div class="fieldWrapper col-sm-3">

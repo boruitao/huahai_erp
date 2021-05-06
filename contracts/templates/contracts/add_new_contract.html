@@ -73,9 +73,19 @@
             {{ form.yearly_price }}
         </div>
         <div class="fieldWrapper col-sm-12">
+            {{ form.total_price.errors }}
+            <label for="{{ form.total_price.id_for_label }}">合同总价:</label>
+            {{ form.total_price }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
             {{ form.payment_cycle.errors }}
-            <label for="{{ form.payment_cycle.id_for_label }}">付款周期（月）:</label>
+            <label for="{{ form.payment_cycle.id_for_label }}">付款周期（按月计）:</label>
             {{ form.payment_cycle }}
+        </div>
+        <div class="fieldWrapper col-sm-12">
+            {{ form.num_cycle.errors }}
+            <label for="{{ form.num_cycle.id_for_label }}">付款期数:</label>
+            {{ form.num_cycle }}
         </div>
         <!-- 铺位经营项目 -->
         <div class="fieldWrapper col-sm-12">

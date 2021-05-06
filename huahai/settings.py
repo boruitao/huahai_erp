@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     #my app
     'notice.apps.NoticeConfig',
-    #'agreement.apps.AgreementConfig',
+    'agreements.apps.AgreementsConfig',
     'payments.apps.PaymentsConfig',
     'contracts.apps.ContractsConfig',
     'users.apps.UsersConfig',

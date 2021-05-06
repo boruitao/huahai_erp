@@ -7,7 +7,7 @@ class ContractForm(forms.ModelForm):
     class Meta:
         model = Contract
         fields = ('start_date','end_date','sign_date','floor_num','store_loc_code','region',
-        'unit_price','area','monthly_price','yearly_price','payment_cycle','business','category',
+        'unit_price','area','monthly_price','yearly_price','total_price','payment_cycle','num_cycle','business','category',
         'promotion_price','deposit','perf_bond','water_bill','elect_bill','host_company')
         # widgets = {
         #     'start_date': DatePickerInput(), # default date-format %m/%d/%Y will be used
@@ -25,7 +25,9 @@ class ContractForm(forms.ModelForm):
         self.fields['area'].widget.attrs.update({'class': 'form-control'})
         self.fields['monthly_price'].widget.attrs.update({'class': 'form-control'})
         self.fields['yearly_price'].widget.attrs.update({'class': 'form-control'})
+        self.fields['total_price'].widget.attrs.update({'class': 'form-control'})
         self.fields['payment_cycle'].widget.attrs.update({'class': 'form-control'})
+        self.fields['num_cycle'].widget.attrs.update({'class': 'form-control'})
         self.fields['business'].widget.attrs.update({'class': 'form-control'})
         self.fields['category'].widget.attrs.update({'class': 'form-control'})
         self.fields['promotion_price'].widget.attrs.update({'class': 'form-control'})

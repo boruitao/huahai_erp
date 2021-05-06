@@ -6,6 +6,8 @@ class Notice_Status(models.IntegerChoices):
     ACTIVE = 0
     OVERDUE = 1
     PAYED = 2
+    INACTIVE = 3
+    TMP = 4
 
 class Notice(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)

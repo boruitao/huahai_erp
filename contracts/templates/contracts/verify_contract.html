@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-3">查看合同</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+        <tr><th style="width: 50%">编号</th><td>{{contract.id}}</td></tr>
+        <tr><th style="width: 50%">合同编号</th><td>{{contract.contract_id}}</td></tr>
+        <tr><th style="width: 50%">合同创建日期</th><td>{{contract.date_added|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">合同创建者</th><td>{{contract.created_by.username}}</td></tr>
+        <tr><th style="width: 50%">甲方公司名</th><td>{{contract.host_company.company_name}}</td></tr>
+        <tr><th style="width: 50%">乙方公司名</th><td>{{contract.buyer_company.company_name}}</td></tr>
+        <tr><th style="width: 50%">开始日期</th><td>{{contract.start_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">截止日期</th><td>{{contract.end_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">签订日期</th><td>{{contract.sign_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">楼层</th><td>{{contract.floor_num}}</td></tr>
+        <tr><th style="width: 50%">铺位号</th><td>{{contract.store_loc_code}}</td></tr>
+        <tr><th style="width: 50%">铺位所在区</th><td>{{contract.region}}</td></tr>
+        <tr><th style="width: 50%">月租金(每㎡)</th><td>{{contract.unit_price}}</td></tr>
+        <tr><th style="width: 50%">面积</th><td>{{contract.area}}</td></tr>
+        <tr><th style="width: 50%">月总价</th><td>{{contract.monthly_price}}</td></tr>
+        <tr><th style="width: 50%">全年总价</th><td>{{contract.yearly_price}}</td></tr>
+        <tr><th style="width: 50%">合同总价</th><td>{{contract.total_price}}</td></tr>
+        <tr><th style="width: 50%">未支付金额</th><td>{{contract.to_be_payed}}</td></tr>
+        <tr><th style="width: 50%">收款周期(月)</th><td>{{contract.payment_cycle}}</td></tr>
+        <tr><th style="width: 50%">付款期数</th><td>{{contract.num_cycle}}</td></tr>
+        <tr><th style="width: 50%">经营项目</th><td>{{contract.business}}</td></tr>
+        <tr><th style="width: 50%">业态</th><td>{{contract.category}}</td></tr>
+        <tr><th style="width: 50%">推广费</th><td>{{contract.promotion_price}}</td></tr>
+        <tr><th style="width: 50%">铺位总定金</th><td>{{contract.deposit}}</td></tr>
+        <tr><th style="width: 50%">履约保证金总价</th><td>{{contract.perf_bond}}</td></tr>
+        <tr><th style="width: 50%">每月单价水费</th><td>{{contract.water_bill}}</td></tr>
+        <tr><th style="width: 50%">每月单价电费</th><td>{{contract.elect_bill}}</td></tr>
+    </table>
+</div>
+{% if first_notices %}
+<hr class="my-4">
+<h4 class="mb-3">首次缴款单</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th>单据编号</th>
+            <th>缴款时段</th>
+            <th>下单日期</th>
+            <th>经销商名称</th>
+            <th>席位号</th>
+            <th>费用总计</th>
+            <th>还需支付</th>
+            <th>状态</th>
+            <!-- <th></th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for notice in first_notices %}
+        <tr>
+        <td>{{notice.notice_id}}</td>
+        <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
+        <td>{{notice.date_released|date:'Y-m-d'}}</td>
+        <td>{{notice.cname}}</td>
+        <td>{{notice.loc_code}}</td>
+        <td>{{notice.total_amount}}</td>
+        <td>{{notice.to_be_payed}}</td>
+        <td>{% if notice.status == 0 %}
+            未超期
+            {% elif notice.status == 1 %}
+            已超期
+            {% elif notice.status == 2 %}
+            已支付
+            {% elif notice.status == 3 %}
+            已取消
+            {% endif %}
+        </td>
+        <!-- <td><a href="{% url 'payments:create_payment' notice.id 0 %}">新增收款</a></td> -->
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+</div>
+<hr class="my-4">
+<h4 class="mb-3">缴款通知单</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th>单据编号</th>
+            <th>缴款时段</th>
+            <th>下单日期</th>
+            <th>经销商名称</th>
+            <th>席位号</th>
+            <th>缴款季度</th>
+            <th>费用总计</th>
+            <th>还需支付</th>
+            <th>状态</th>
+            <!-- <th></th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for notice in periodical_notices %}
+        <tr>
+        <td>{{notice.notice_id}}</td>
+        <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
+        <td>{{notice.date_released|date:'Y-m-d'}}</td>
+        <td>{{notice.cname}}</td>
+        <td>{{notice.loc_code}}</td>
+        <td>{{notice.period_num}}</td>
+        <td>{{notice.total_amount}}</td>
+        <td>{{notice.to_be_payed}}</td>
+        <td>{% if notice.status == 0 %}
+            未超期
+            {% elif notice.status == 1 %}
+            已超期
+            {% elif notice.status == 2 %}
+            已支付
+            {% elif notice.status == 3 %}
+            已取消
+            {% endif %}
+        </td>
+        <!-- <td><a href="{% url 'payments:create_payment' notice.id 1 %}">新增收款</a></td> -->
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+</div>
+{% endif %}
+<hr class="my-4">
+<small class="d-block text-end">
+    <a href="{% url 'contracts:verify_contracts' %}">审核其他合同</a>
+</small>
+{% endblock content %}

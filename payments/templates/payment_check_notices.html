@@ -10,9 +10,10 @@
               <th>签署日期</th>
               <th>合同时段</th>
               <th>铺位号</th>
-              <th>铺位经营项目</th>
+              <th>经营项目</th>
               <th>公司名</th>
               <th>月租金(每㎡)</th>
+              <th>合同总价</th>
               <th>状态</th>
             </tr>
           </thead>
@@ -26,6 +27,7 @@
               <td>{{contract.business}}</td>
               <td>{{contract.buyer_company.company_name}}</td>
               <td>{{contract.unit_price}}</td>
+              <td>{{contract.total_price}}</td>
               <td>{% if contract.status == 0 %}
                 已创立
                 {% elif contract.status == 1 %}
@@ -52,6 +54,7 @@
                 <th>席位号</th>
                 <th>费用总计</th>
                 <th>还需支付</th>
+                <th>状态</th>
                 <th></th>
             </tr>
         </thead>
@@ -65,6 +68,16 @@
             <td>{{notice.loc_code}}</td>
             <td>{{notice.total_amount}}</td>
             <td>{{notice.to_be_payed}}</td>
+            <td>{% if notice.status == 0 %}
+                未超期
+                {% elif notice.status == 1 %}
+                已超期
+                {% elif notice.status == 2 %}
+                已支付
+                {% elif notice.status == 3 %}
+                已取消
+                {% endif %}
+            </td>
             <td><a href="{% url 'payments:create_payment' notice.id 0 %}">新增收款</a></td>
             </tr>
             {% endfor %}
@@ -85,6 +98,7 @@
                 <th>缴款季度</th>
                 <th>费用总计</th>
                 <th>还需支付</th>
+                <th>状态</th>
                 <th></th>
             </tr>
         </thead>
@@ -99,6 +113,16 @@
             <td>{{notice.period_num}}</td>
             <td>{{notice.total_amount}}</td>
             <td>{{notice.to_be_payed}}</td>
+            <td>{% if notice.status == 0 %}
+                未超期
+                {% elif notice.status == 1 %}
+                已超期
+                {% elif notice.status == 2 %}
+                已支付
+                {% elif notice.status == 3 %}
+                已取消
+                {% endif %}
+            </td>
             <td><a href="{% url 'payments:create_payment' notice.id 1 %}">新增收款</a></td>
             </tr>
             {% endfor %}

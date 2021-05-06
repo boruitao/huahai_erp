@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+{% load humanize %}    
+<h4 class="mb-3">原始通知单</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+        <tr><th style="width: 50%">单据编号</th><td>{{old_pn.notice_id}}</td></tr>
+        <tr><th style="width: 50%">甲方公司</th><td>{{old_pn.hname}}</td></tr>
+        <tr><th style="width: 50%">甲方所在城市</th><td>{{old_pn.hcity}}</td></tr>
+        {% if old_pn.status == 0 %}
+        <tr><th style="width: 50%">状态</th><td>未收缴</td></tr>
+        {% elif old_pn.status == 1 %}
+        <tr><th style="width: 50%">状态</th><td>已超期</td></tr>
+        {% elif old_pn.status == 2 %}
+        <tr><th style="width: 50%">状态</th><td>已收缴</td></tr>
+        <tr><th style="width: 50%">收缴日期</th><td>{{old_pn.date_payed|date:'Y-m-d'}}</td></tr>
+        {% elif old_pn.status == 3 %}
+        <tr><th style="width: 50%">状态</th><td>已取消</td></tr>
+        {% endif %}
+        <tr><th style="width: 50%">下单日期</th><td>{{old_pn.date_released|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">季度</th><td>{{old_pn.period_num}}</td></tr>
+        <tr><th style="width: 50%">经销商名称</th><td>{{old_pn.cname}}</td></tr>
+        <tr><th style="width: 50%">席位号</th><td>{{old_pn.loc_code}}</td></tr>
+        <tr><th style="width: 50%">付款截止日期</th><td>{{old_pn.deadline|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">缴款时段开始时间</th><td>{{old_pn.payment_start_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">缴款时段截止时间</th><td>{{old_pn.payment_end_date|date:'Y-m-d'}}</td></tr>
+        <tr><th style="width: 50%">费用总计</th><td>¥ {{old_pn.total_amount| intcomma}}</td></tr>
+        <tr><th style="width: 50%">还需支付</th><td>¥ {{old_pn.to_be_payed| intcomma}}</td></tr>
+    </table>
+</div>
+<hr class="my-4">
+<h4 class="mb-3">修改以上通知单</h4>
+<div class="table-responsive table-bordered">
+    <table class="table table-striped table-sm">
+        <tr><th style="width: 50%">单据编号</th><td>{{new_pn.notice_id}}</td></tr>
+    <tr><th style="width: 50%">甲方公司</th><td>{{new_pn.hname}}</td></tr>
+    <tr><th style="width: 50%">甲方所在城市</th><td>{{new_pn.hcity}}</td></tr>
+    {% if new_pn.status == 0 %}
+    <tr><th style="width: 50%">状态</th><td>未收缴</td></tr>
+    {% elif new_pn.status == 1 %}
+    <tr><th style="width: 50%">状态</th><td>已超期</td></tr>
+    {% elif new_pn.status == 2 %}
+    <tr><th style="width: 50%">状态</th><td>已收缴</td></tr>
+    <tr><th style="width: 50%">收缴日期</th><td>{{new_pn.date_payed|date:'Y-m-d'}}</td></tr>
+    {% elif new_pn.status == 3 %}
+    <tr><th style="width: 50%">状态</th><td>已取消</td></tr>
+    {% endif %}
+    <tr><th style="width: 50%">下单日期</th><td>{{new_pn.date_released|date:'Y-m-d'}}</td></tr>
+    <tr><th style="width: 50%">季度</th><td>{{new_pn.period_num}}</td></tr>
+    <tr><th style="width: 50%">经销商名称</th><td>{{new_pn.cname}}</td></tr>
+    <tr><th style="width: 50%">席位号</th><td>{{new_pn.loc_code}}</td></tr>
+    <tr><th style="width: 50%">付款截止日期</th><td>{{new_pn.deadline|date:'Y-m-d'}}</td></tr>
+    <tr><th style="width: 50%">缴款时段开始时间</th><td>{{new_pn.payment_start_date|date:'Y-m-d'}}</td></tr>
+    <tr><th style="width: 50%">缴款时段截止时间</th><td>{{new_pn.payment_end_date|date:'Y-m-d'}}</td></tr>
+    <tr><th style="width: 50%">费用总计</th><td>¥ {{new_pn.total_amount| intcomma}}</td></tr>
+    <tr><th style="width: 50%">还需支付</th><td>¥ {{new_pn.to_be_payed| intcomma}}</td></tr>
+    </table>
+</div>
+<div class="row g-4">
+    <div class="col-sm-6 text-end">
+        <form method="post" action="{% url 'agreements:create_per_notice_pair' contract.id old_pn.id new_pn.id %}">
+            {% csrf_token %}
+            <button name="submit" class="btn btn-primary" onclick="return confirm('您确定您的修改吗？');">确认</button>
+        </form>
+    </div>
+    <div class="col-sm-6">
+        <form method="post" action="{% url 'agreements:create_agreement' contract.id%}">
+            {% csrf_token %}
+            <button name="submit" class="btn btn-outline-secondary">取消</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

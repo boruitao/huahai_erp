@@ -14,8 +14,8 @@ from notice.excel_helper import create_first_notice, create_periodical_notice
 @login_required
 def all_first_notices(request):
     active_notices = First_Notice.objects.filter(status=Notice_Status.ACTIVE)
-    inactive_notices = First_Notice.objects.filter(status=Notice_Status.PAYED)
-    context = {'notices': {'active' : active_notices, 'inactive' : inactive_notices}}
+    payed_notices = First_Notice.objects.filter(status=Notice_Status.PAYED)
+    context = {'notices': {'active' : active_notices, 'payed' : payed_notices}}
     return render(request, 'first_notices/all_first_notices.html', context)
 
 @login_required
@@ -68,8 +68,36 @@ def print_first_notice(request, notice_id):
 @login_required
 def all_periodical_notices(request):
     notices = Periodical_Notice.objects.all()
+    # active_notices = Periodical_Notice.objects.filter(status=Notice_Status.ACTIVE)
+    # payed_notices = Periodical_Notice.objects.filter(status=Notice_Status.PAYED)
+    # context = {'notices': {'active' : active_notices, 'payed' : payed_notices}}
     context = {'notices': notices}
     return render(request, 'periodical_notices/all_periodical_notices.html', context)
+
+@login_required
+def active_periodical_notices(request):
+    notices = Periodical_Notice.objects.filter(status=Notice_Status.ACTIVE)
+    context = {'notices': notices}
+    return render(request, 'periodical_notices/active_periodical_notices.html', context)
+
+@login_required
+def overdue_periodical_notices(request):
+    notices = Periodical_Notice.objects.filter(status=Notice_Status.OVERDUE)
+    context = {'notices': notices}
+    return render(request, 'periodical_notices/overdue_periodical_notices.html', context)
+
+@login_required
+def inactive_periodical_notices(request):
+    notices = Periodical_Notice.objects.filter(status=Notice_Status.INACTIVE)
+    context = {'notices': notices}
+    return render(request, 'periodical_notices/inactive_periodical_notices.html', context)
+
+@login_required
+def payed_periodical_notices(request):
+    notices = Periodical_Notice.objects.filter(status=Notice_Status.PAYED)
+    context = {'notices': notices}
+    return render(request, 'periodical_notices/payed_periodical_notices.html', context)
+
 
 @login_required
 def check_periodical_notice(request, notice_id):

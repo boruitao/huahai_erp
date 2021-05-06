@@ -21,7 +21,7 @@
         {% for contract in contracts %}
         <tr>
           <td>{{contract.id}}</td>
-          <td>{{contract.sign_date}}</td>
+          <td>{{contract.sign_date|date:'Y-m-d'}}</td>
           <td>{{contract.store_loc_code}}</td>
           <td>{{contract.business}}</td>
           <td>{{contract.buyer_company.company_name}}</td>
@@ -40,14 +40,11 @@
               <button name="submit" class="btn-secondary" onclick="return confirm('您确定取消此合同吗（编号：{{ contract.id}}）？');">未通过</button>
             </form>
           </td>
-          <td><a href="{% url 'contracts:check_contract' contract.id %}">查看合同</a></td>
+          <td><a href="{% url 'contracts:verify_contract' contract.id %}">查看</a></td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
 </div>
-  <small class="d-block text-end">
-    <a href="{% url 'contracts:all_contracts' %}">查看其他合同</a>
-  </small>
 
 {% endblock content %}

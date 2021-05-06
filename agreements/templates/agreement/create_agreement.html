@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h4 class="mb-3">新增补充协议</h4>
+    <div class="table-responsive table-bordered">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>签署日期</th>
+            <th>铺位号</th>
+            <th>铺位经营项目</th>
+            <th>公司名</th>
+            <th>月租金</th>
+            <th>年金额</th>
+            <th>总金额</th>
+            <th>开始日期</th>
+            <th>截止日期</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{contract.id}}</td>
+            <td>{{contract.sign_date|date:'Y-m-d'}}</td>
+            <td>{{contract.store_loc_code}}</td>
+            <td>{{contract.business}}</td>
+            <td>{{contract.buyer_company.company_name}}</td>
+            <td>{{contract.monthly_price}}</td>
+            <td>{{contract.yearly_price}}</td>
+            <td>{{contract.total_price}}</td>
+            <td>{{contract.start_date|date:'Y-m-d'}}</td>
+            <td>{{contract.end_date|date:'Y-m-d'}}</td>
+            <td>{% if contract.status == 0 %}
+                已创立
+                {% elif contract.status == 1 %}
+                已审核通过
+                {% elif contract.status == 2 %}
+                审核未通过
+                {% elif contract.status == 3 %}
+                已完成
+                {% endif %}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr class="my-4">
+    <h4 class="mb-3">首次缴款单</h4>
+  <div class="table-responsive table-bordered">
+      <table class="table table-striped table-sm">
+      <thead>
+          <tr>
+              <th>单据编号</th>
+              <th>缴款时段</th>
+              <th>下单日期</th>
+              <th>经销商名称</th>
+              <th>席位号</th>
+              <th>费用总计</th>
+              <th>还需支付</th>
+              <th>状态</th>
+              <!-- <th></th> -->
+          </tr>
+      </thead>
+      <tbody>
+          {% for notice in first_notices %}
+          <tr>
+            <td>{{notice.notice_id}}</td>
+            <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
+            <td>{{notice.date_released|date:'Y-m-d'}}</td>
+            <td>{{notice.cname}}</td>
+            <td>{{notice.loc_code}}</td>
+            <td>{{notice.total_amount}}</td>
+            <td>{{notice.to_be_payed}}</td>
+            <td>{% if notice.status == 0 %}
+                未超期
+                {% elif notice.status == 1 %}
+                已超期
+                {% elif notice.status == 2 %}
+                已支付
+                {% elif notice.status == 3 %}
+                已取消
+                {% endif %}
+            </td>
+            <!-- <td><a href="{% url 'payments:create_payment' notice.id 0 %}">新增收款</a></td> -->
+          </tr>
+          {% endfor %}
+      </tbody>
+      </table>
+  </div>
+  <hr class="my-4">
+  <h4 class="mb-3">修改缴款单</h4>
+  <div class="table-responsive table-bordered">
+      <table class="table table-striped table-sm">
+      <thead>
+          <tr>
+              <th>编号</th>
+              <th>单据编号</th>
+              <th>缴款时段</th>
+              <th>下单日期</th>
+              <th>经销商名称</th>
+              <th>席位号</th>
+              <th>缴款季度</th>
+              <th>费用总计</th>
+              <th>还需支付</th>
+              <th>状态</th>
+              <th></th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for notice in periodical_notices %}
+          <tr>
+          <td>{{notice.id}}</td>
+          <td>{{notice.notice_id}}</td>
+          <td>{{notice.payment_start_date|date:'Y-m-d'}} 到 {{notice.payment_end_date|date:'Y-m-d'}}</td>
+          <td>{{notice.date_released|date:'Y-m-d'}}</td>
+          <td>{{notice.cname}}</td>
+          <td>{{notice.loc_code}}</td>
+          <td>{{notice.period_num}}</td>
+          <td>{{notice.total_amount}}</td>
+          <td>{{notice.to_be_payed}}</td>
+          <td>{% if notice.status == 0 %}
+              未超期
+              {% elif notice.status == 1 %}
+              已超期
+              {% elif notice.status == 2 %}
+              已支付
+              {% elif notice.status == 3 %}
+              已取消
+              {% elif notice.status == 4 %}
+              <div style="color:red;">临时创建</div>
+              {% endif %}
+          </td>
+          <td>
+          {% if notice.status == 0 or notice.status == 1 %}
+          <a style="color:blue;" href="{% url 'agreements:create_new_per_notice' contract.id notice.id %}">修改</a>
+          {% elif notice.status == 4 %}
+          <a style="color:red;" onclick="return confirm('您确定删除吗？');" href="{% url 'agreements:delete_per_pair' contract.id notice.id %}">删除</a>
+          {% endif %}
+          </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+      </table>
+  </div>
+  <div class="table-responsive table-bordered">
+    <form method="post" action="{% url 'agreements:create_agreement' contract.id %}">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+        <table class="table table-striped table-sm">
+            <tr><th style="width: 50%">请输入补充协议事由</th><td>{{form.reason}}</td></tr>
+        </table>
+        <button name="submit" class="btn btn-success">下一步</button>
+        <input type="hidden" name="next" value="{% url 'agreements:create_agreement' contract.id %}" />
+    </form>
+</div>
+</div>
+
+{% endblock content %}

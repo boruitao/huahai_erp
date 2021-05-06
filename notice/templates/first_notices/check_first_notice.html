@@ -15,6 +15,8 @@
         {% elif notice.status == 2 %}
         <tr><th style="width: 50%">状态</th><td>已收缴</td></tr>
         <tr><th style="width: 50%">收缴日期</th><td>{{notice.date_payed|date:'Y-m-d'}}</td></tr>
+        {% elif notice.status == 3 %}
+        <tr><th style="width: 50%">状态</th><td>已取消</td></tr>
         {% endif %}
         <tr><th style="width: 50%">下单日期</th><td>{{notice.date_released|date:'Y-m-d'}}</td></tr>
         <tr><th style="width: 50%">经销商名称</th><td>{{notice.cname}}</td></tr>

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h4 class="mb-3">补充协议</h4>
+  <small class="d-block text-end">
+    <a href="{% url 'agreements:agreement_search_contract' %}">新增补充协议</a>
+  </small> 
+  <div class="nav-scroller bg--body shadow-sm">
+    <nav class="nav nav-underline" aria-label="Secondary navigation">
+      <a class="nav-link active" aria-current="page" href="{% url 'agreements:all_agreements'%}">全部</a>
+      <a class="nav-link" href="{% url 'agreements:created_agreements'%}">未审核</a>
+      <a class="nav-link" href="{% url 'agreements:approved_agreements'%}">已通过</a>
+      <a class="nav-link" href="{% url 'agreements:unapproved_agreements'%}">未通过</a>
+      <a class="nav-link" href="#">
+        Friends
+        <span class="badge bg-light text-dark rounded-pill align-text-bottom">27</span>
+      </a>
+    </nav>
+  </div>
+  <div class="table-responsive table-bordered">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+              <th>编号</th>
+              <th>创建日期</th>
+              <th>所属合同编号</th>
+              <th>所属公司/个人名</th>
+              <th>创建事由</th>
+              <th>状态</th>
+              <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for agr in agreements %}
+          <tr>
+            <td>{{agr.id}}</td>
+            <td>{{agr.date_added|date:'Y-m-d'}}</td>
+            <td>{{agr.old_contract.contract_id}}</td>
+            <td>{{agr.cname}}</td>
+            <td>{{agr.reason}}</td>
+            <td>{% if agr.status == 0 %}
+              新创建
+              {% elif agr.status == 1 %}
+              已批准
+              {% elif agr.status == 2 %}
+              已取消
+              {% endif %}
+          </td>
+            <td><a href="{% url 'agreements:check_agreement' agr.id %}">查看协议</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>
+{% endblock content %}

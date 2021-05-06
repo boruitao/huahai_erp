@@ -6,6 +6,7 @@ urlpatterns = [
     #首次收款单
     url(r'^payments/search_contract/$', views.payment_search_contract, name='payment_search_contract'),
     url(r'^payments/check_notices/(?P<contract_id>\d+)/$', views.payment_check_notices, name='payment_check_notices'),
+    url(r'^payments/check_payment/(?P<payment_id>\d+)/$', views.check_payment, name='check_payment'),
     url(r'^payments/verify_payments/(?P<payment_id>\d+)/$', views.verify_single_payment, name='verify_single_payment'),
     url(r'^payments/verify_payments/$', views.verify_payments, name='verify_payments'),
     url(r'^payments/all/$', views.all_payments, name='all_payments'),

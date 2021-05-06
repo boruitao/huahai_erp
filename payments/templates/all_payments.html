@@ -36,11 +36,14 @@
               已取消
               {% endif %}
           </td>
-            <td>{% if payment.is_first %}
+            <!-- <td>{% if payment.is_first %}
                 <a href="{% url 'notice:check_first_notice' payment.first_notice.id %}">查看缴款单</a>
                 {% elif payment.is_per %}
                 <a href="{% url 'notice:check_periodical_notice' payment.per_notice.id %}">查看缴款单</a>
                 {% endif %}
+            </td> -->
+            <td>
+              <a href="{% url 'payments:check_payment' payment.id %}">查看收款单</a>
             </td>
           </tr>
           {% endfor %}

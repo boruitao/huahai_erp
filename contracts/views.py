@@ -22,34 +22,40 @@ def all_contracts(request):
     return render(request, 'contracts/all_contracts.html', context)
 
 @login_required
-def all_created_contracts(request):
+def created_contracts(request):
     contracts = Contract.objects.filter(status=Contract_Status.CREATED).order_by('-sign_date')
     context = {'contracts': contracts}
-    return render(request, 'contracts/all_created_contracts.html', context)
+    return render(request, 'contracts/created_contracts.html', context)
 
 @login_required
-def all_approved_contracts(request):
+def approved_contracts(request):
     contracts = Contract.objects.filter(status=Contract_Status.APPROVED).order_by('-sign_date')
     context = {'contracts': contracts}
-    return render(request, 'contracts/all_approved_contracts.html', context)
+    return render(request, 'contracts/approved_contracts.html', context)
 
 @login_required
-def all_unapproved_contracts(request):
+def unapproved_contracts(request):
     contracts = Contract.objects.filter(status=Contract_Status.UNAPPROVED).order_by('-sign_date')
     context = {'contracts': contracts}
-    return render(request, 'contracts/all_unapproved_contracts.html', context)
+    return render(request, 'contracts/unapproved_contracts.html', context)
 
 @login_required
-def all_completed_contracts(request):
+def completed_contracts(request):
     contracts = Contract.objects.filter(status=Contract_Status.COMPLETED).order_by('-sign_date')
     context = {'contracts': contracts}
-    return render(request, 'contracts/all_completed_contracts.html', context)
+    return render(request, 'contracts/completed_contracts.html', context)
 
 @login_required
 def verify_contracts(request):
     contracts = Contract.objects.filter(status=Contract_Status.CREATED).order_by('-sign_date')
     context = {'contracts': contracts}
     return render(request, 'contracts/verify_contracts.html', context)
+
+@login_required
+def verify_contract(request, contract_id):
+    contract = Contract.objects.get(id=contract_id)
+    context = {'contract': contract}
+    return render(request, 'contracts/verify_contract.html', context)
 
 @login_required
 def search_contracts(request, status_id):
@@ -110,6 +116,10 @@ def search_contracts(request, status_id):
 def check_contract(request, contract_id):
     contract = Contract.objects.get(id=contract_id)
     context = {'contract': contract}
+    if contract.status == Contract_Status.APPROVED | contract.status == Contract_Status.COMPLETED:
+        first_pn = First_Notice.objects.filter(contract__id=contract_id)
+        periodical_pns = Periodical_Notice.objects.filter(contract__id=contract_id)
+        context = {'contract' : contract, 'first_notices' : first_pn, 'periodical_notices':periodical_pns}
     return render(request, 'contracts/check_contract.html', context)
 
 @login_required
@@ -123,6 +133,8 @@ def new_contract(request, company_id):
             new_contract = form.save(commit=False)
             new_contract.created_by = request.user  # Set contracts owner attribute to current user.
             new_contract.buyer_company = company
+            # to_be_payed
+            new_contract.to_be_payed = new_contract.total_price
             new_contract.save()  # Save the changes to the database.
             return HttpResponseRedirect(reverse('contracts:all_contracts'))
     context = {'company' : company, 'form': form}

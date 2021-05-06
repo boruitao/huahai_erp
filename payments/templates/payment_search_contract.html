@@ -40,6 +40,7 @@
               <th>铺位经营项目</th>
               <th>公司名</th>
               <th>月租金(每㎡)</th>
+              <th>合同总价</th>
               <th>开始日期</th>
               <th>截止日期</th>
               <th>状态</th>
@@ -55,6 +56,7 @@
               <td>{{contract.business}}</td>
               <td>{{contract.buyer_company.company_name}}</td>
               <td>{{contract.unit_price}}</td>
+              <td>{{contract.total_price}}</td>
               <td>{{contract.start_date|date:'Y-m-d'}}</td>
               <td>{{contract.end_date|date:'Y-m-d'}}</td>
               <td>{% if contract.status == 0 %}

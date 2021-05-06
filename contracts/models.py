@@ -40,6 +40,7 @@ class Contract(models.Model): #合同
     status = models.IntegerField(default=Contract_Status.CREATED, choices=Contract_Status.choices) #状态
     date_added = models.DateTimeField(auto_now_add=True) #合同创建日期
     date_approved = models.DateTimeField('date_approved', null=True)
+    date_completed = models.DateTimeField('date_completed', null=True)
     contract_id = models.CharField(default='无编号（未审核通过）', max_length=13) #合同编号
     start_date = models.DateField('start date') # 开始日期
     end_date = models.DateField('end date') # 截止日期
@@ -51,7 +52,10 @@ class Contract(models.Model): #合同
     area = models.DecimalField(max_digits=20, decimal_places=2) # 面积
     monthly_price = models.DecimalField(max_digits=20, decimal_places=2) # 月总价
     yearly_price = models.DecimalField(max_digits=20, decimal_places=2) # 全年总价
+    total_price = models.DecimalField(max_digits=20, decimal_places=2) # 合同总价值
+    to_be_payed = models.DecimalField(max_digits=20, decimal_places=2, null=True) # 还需支付的金额
     payment_cycle = models.IntegerField('payment cycle') # 收款周期按月计
+    num_cycle = models.IntegerField('num of cycle') # 收款期数
     business = models.CharField(max_length=200) # 经营项目
     GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'), ('U', 'Unisex/Parody'))
     category = models.CharField(max_length=200,choices=GENDER_CHOICES) # 业态

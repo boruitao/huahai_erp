@@ -107,6 +107,19 @@ def verify_single_payment(request, payment_id):
         notice = Periodical_Notice.objects.get(id=payment.per_notice.id)
         context = {'payment':payment, 'notice':notice}
     return render(request, 'verify_single_payment.html', context)
+
+@login_required
+def check_payment(request, payment_id):
+    payment = Payment.objects.get(id=payment_id)
+    context = {'payment': payment}
+    if payment.is_first:
+        notice = First_Notice.objects.get(id=payment.first_notice.id)
+        context = {'payment':payment, 'notice':notice}
+    elif payment.is_per:
+        notice = Periodical_Notice.objects.get(id=payment.per_notice.id)
+        context = {'payment':payment, 'notice':notice}
+    return render(request, 'check_payment.html', context)
+
 # @login_required
 # def all_created_contracts(request):
 #     contracts = Contract.objects.filter(status=Contract_Status.CREATED).order_by('-sign_date')

@@ -55,8 +55,8 @@
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">合同管理</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown01">
                     <li><a class="dropdown-item" href="{% url 'contracts:all_contracts' %}">查看合同</a></li>
-                    <li><a class="dropdown-item" href="{% url 'notice_handler:manage_search_contract' %}">补充协议</a></li>
-                    <li><a class="dropdown-item" href="#">协议审核#</a></li>
+                    <li><a class="dropdown-item" href="{% url 'agreements:all_agreements' %}">补充协议</a></li>
+                    <li><a class="dropdown-item" href="{% url 'agreements:verify_agreements' %}">协议审核</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
